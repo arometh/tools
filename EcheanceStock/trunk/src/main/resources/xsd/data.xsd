@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="fields" maxOccurs="unbounded" />
+        <xs:element ref="documents" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fields">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name" />
+        <xs:element ref="region" />
+        <xs:element ref="is_region_once_per_page" />
+        <xs:element ref="is_index" />
+        <xs:element ref="is_doc_id" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="region" type="xs:string"/>
+  <xs:element name="is_region_once_per_page" type="xs:integer"/>
+  <xs:element name="is_index" type="xs:integer"/>
+  <xs:element name="is_doc_id" type="xs:integer"/>
+
+  <xs:element name="documents">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="application" />
+		<xs:element ref="nom" />
+		<xs:element ref="type_doc" />
+		<xs:element ref="date_creation" />
+		<xs:element ref="identifiant" />		
+        <xs:element ref="file_name" />
+        <xs:element name="pivot" />
+        
+      </xs:all>
+      <xs:attribute name="key" type="xs:NMTOKEN" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="application">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_32">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>  
+
+  <xs:element name="nom">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_255">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>
+   
+  <xs:element name="type_doc">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_50">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>
+  
+  <xs:element name="date_creation">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="date_range">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="identifiant">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_30">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>  
+
+  <xs:element name="file_name" type="xs:string"/>
+  
+  <!-- Bloc Pivot -->
+	<xs:element name="pivot">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="sap" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ISUouCRM" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="message" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="noBP" type="xs:string" minOccurs="0"/>
+							<xs:element name="typeDocument" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroCompteContrat" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroContrat" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroPdl" type="xs:string" minOccurs="0"/>
+							<xs:element name="alerteFacture" type="xs:string" minOccurs="0"/>
+							<xs:element name="adresseElectronique" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroDeTelPortable" type="xs:string" minOccurs="0"/>
+							<xs:element name="montantFacture" type="xs:string" minOccurs="0"/>
+							<xs:element name="civilite" type="xs:string" minOccurs="0"/>
+							<xs:element name="nomCl" type="xs:string" minOccurs="0"/>
+							<xs:element name="prenom" type="xs:string" minOccurs="0"/>
+							<xs:element name="adresse" type="xs:string" minOccurs="0"/>
+							<xs:element name="codeOffreElec" type="xs:string" minOccurs="0"/>
+							<xs:element name="codeOffreGaz" type="xs:string" minOccurs="0"/>
+							<xs:element name="codeOffreService" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroDoc" type="xs:string" minOccurs="0"/>
+							<xs:element name="nbExemplaires" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleOffre" type="xs:string" minOccurs="0"/>
+							<xs:element name="typeOffre" type="xs:string" minOccurs="0"/>
+							<xs:element name="dateValidOffre" type="xs:date" minOccurs="0"/>
+							<xs:element name="numeroProposition" type="xs:string" minOccurs="0"/>
+							<xs:element name="noRueLC" type="xs:string" minOccurs="0"/>
+							<xs:element name="rueLC" type="xs:string" minOccurs="0"/>
+							<xs:element name="codePostalLC" type="xs:string" minOccurs="0"/>
+							<xs:element name="villeLC" type="xs:string" minOccurs="0"/>
+							<xs:element name="modeReglement" type="xs:string" minOccurs="0"/>
+							<xs:element name="mensualisation" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleSite" type="xs:string" minOccurs="0"/>
+							<xs:element name="etage" type="xs:string" minOccurs="0"/>
+							<xs:element name="local" type="xs:string" minOccurs="0"/>
+							<xs:element name="cplmtLocal" type="xs:string" minOccurs="0"/>
+							<xs:element name="cplmt1Site" type="xs:string" minOccurs="0"/>
+							<xs:element name="cplmt2Site" type="xs:string" minOccurs="0"/>
+							<xs:element name="telAContacter" type="xs:string" minOccurs="0"/>
+							<xs:element name="templateMail" type="xs:string" minOccurs="0"/>
+							<xs:element name="adresseLieuConsommation" type="xs:string" minOccurs="0"/>
+							<xs:element name="adresseFacturation" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroPdlGaz" type="xs:string" minOccurs="0"/>
+							<xs:element name="NumTelServiceClient" type="xs:string" minOccurs="0"/>
+							<xs:element name="dateEcheance" type="xs:date" minOccurs="0"/>
+							<xs:element name="nomConseiller" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroPdlElec" type="xs:string" minOccurs="0"/>
+							<xs:element name="email" type="xs:string" minOccurs="0"/>
+							<xs:element name="capitalSocial" type="xs:string" minOccurs="0"/>
+							<xs:element name="adressePayeurDivergent" type="xs:string" minOccurs="0"/>
+							<xs:element name="montantPA" type="xs:string" minOccurs="0"/>
+							<xs:element name="adrPrestCentrePaiement1" type="xs:string" minOccurs="0"/>
+							<xs:element name="adrPrestCentrePaiement2" type="xs:string" minOccurs="0"/>
+							<xs:element name="numeroNNEIdentGDF" type="xs:string" minOccurs="0"/>
+							<xs:element name="conseiller" type="xs:string" minOccurs="0"/>
+							<xs:element name="payeurDivergent" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleOffrePack" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleOffreEnergie" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleOffreService" type="xs:string" minOccurs="0"/>
+							<xs:element name="templateEmailCPV" type="xs:string" minOccurs="0"/>
+							<xs:element name="dureeRemiseStructCombRec" type="xs:string" minOccurs="0"/>
+							<xs:element name="pourcentRemiseStructCombRec" type="xs:string" minOccurs="0"/>
+							<xs:element name="montantRemiseStructCombOS" type="xs:string" minOccurs="0"/>
+							<xs:element name="prixTotalOffreService" type="xs:string" minOccurs="0"/>
+							<xs:element name="libelleRemiseEnseigneService" type="xs:string" minOccurs="0"/>
+							<xs:element name="montantRemiseEnseigneService" type="xs:string" minOccurs="0"/>
+							<xs:element name="montantPromotionService" type="xs:string" minOccurs="0"/>
+							<xs:element name="pourcentRemisePromService" type="xs:string" minOccurs="0"/>
+							<xs:element name="dureePromotionService" type="xs:string" minOccurs="0"/>
+							<xs:element name="libellePromotionService" type="xs:string" minOccurs="0"/>
+							<xs:element name="NomBureauExpService" type="xs:string" minOccurs="0"/>
+							<xs:element name="dateRDVService" type="xs:date" minOccurs="0"/>
+							<xs:element name="debutCrHorService" type="xs:string" minOccurs="0"/>
+							<xs:element name="finCrHorService" type="xs:string" minOccurs="0"/>
+							<xs:element name="envoiMailCPV" type="xs:string" minOccurs="0"/>
+							<xs:element name="sapIDCPV" type="xs:string" minOccurs="0"/>
+							<xs:element name="dateCreation" type="xs:dateTime" minOccurs="0"/>
+							<xs:element name="sms" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="canal" type="xs:string" minOccurs="0"/>
+				<xs:element name="dateReception" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="typeDocument" type="xs:string" minOccurs="0"/>
+				<xs:element name="codePostal" type="xs:string" minOccurs="0"/>
+				<xs:element name="sapId" type="xs:string" minOccurs="0"/>
+				<xs:element name="referenceClient" type="xs:string" minOccurs="0"/>
+				<xs:element name="numeroContact" type="xs:string" minOccurs="0"/>
+				<xs:element name="nomClient" type="xs:string" minOccurs="0"/>
+				<xs:element name="adresseClient" type="xs:string" minOccurs="0"/>
+				<xs:element name="numeroCompteContrat" type="xs:string" minOccurs="0"/>
+				<xs:element name="numeroContrat" type="xs:string" minOccurs="0"/>
+				<xs:element name="numeroPdl" type="xs:string" minOccurs="0"/>
+				<xs:element name="tsa" type="xs:string" minOccurs="0"/>
+				<xs:element name="resultat" type="xs:string" minOccurs="0"/>
+				<xs:element name="numeroIBAN" type="xs:string" minOccurs="0"/>
+				<xs:element name="apSigne" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="apMensualise" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="apRIB" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="apPrerempli" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="numeroPropComm" type="xs:string" minOccurs="0"/>
+				<xs:element name="origine" type="xs:string" minOccurs="0"/>
+				<xs:element name="signe" type="xs:string" minOccurs="0"/>
+				<xs:element name="courrierRecommande" type="xs:string" minOccurs="0"/>
+				<xs:element name="dateEffetCPV" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="localite" type="xs:string" minOccurs="0"/>
+				<xs:element name="codeAction" type="xs:string" minOccurs="0"/>
+				<!-- Ajout Manda SEPA -->
+				<xs:element name="RUM" type="xs:string" minOccurs="0"/>
+				<xs:element name="ICS" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="FR03SYM002381"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="dateSignature" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="dateSignature" type="xs:string" minOccurs="0"/>
+				<xs:element name="statutMandat" type="xs:integer" fixed="1" minOccurs="0"/>
+				<!-- Fin Ajout Manda SEPA -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+  
+  <!-- alphanumerique 30 -->
+  <xs:simpleType name="string_mandatory_max_30">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="30"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 32 -->
+  <xs:simpleType name="string_mandatory_max_32">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="32"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 50 -->
+  <xs:simpleType name="string_mandatory_max_50">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="50"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 250 -->
+  <xs:simpleType name="string_mandatory_max_250">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="250"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 255 -->
+  <xs:simpleType name="string_mandatory_max_255">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="255"/>
+   </xs:restriction>
+  </xs:simpleType>
+
+  <!-- date -->  
+  <xs:simpleType name="date_range">
+    <xs:restriction base="xs:date">
+     <xs:minInclusive value="1900-01-01"/>
+     <xs:maxInclusive value="2100-12-31"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date_vide">
+    <xs:union memberTypes="date_range">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+        </xs:restriction>
+       </xs:simpleType>
+    </xs:union>
+   </xs:simpleType>
+</xs:schema>

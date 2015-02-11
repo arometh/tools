@@ -1,0 +1,518 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.extelia.gdf</groupId>
+	<artifactId>EcheanceStock</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>Socle d'Archivage Electronique</name>
+	<url>http://maven.apache.org</url>	
+	<properties>
+		<org.springframework.version>3.1.1.RELEASE</org.springframework.version>
+	</properties>
+	<dependencies>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>		
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency> 
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.4</version>
+		</dependency>  
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1103-jdbc3</version>
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1101-jdbc41</version>
+		</dependency>-->
+		
+		<!-- Spring -->
+		<dependency>
+	      <groupId>org.opensymphony.quartz</groupId>
+	      <artifactId>quartz</artifactId>
+	      <version>1.6.5</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-context</artifactId>
+	      <version>${org.springframework.version}</version>
+	      <scope>compile</scope>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.springframework</groupId>
+	      <artifactId>spring-web</artifactId>
+	      <version>${org.springframework.version}</version>
+	      <scope>compile</scope>
+	    </dependency>
+	    <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jpa</artifactId>
+			<version>2.0.8</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>toplink-essentials</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>7.0.30</version>
+		</dependency>        
+        <dependency>
+			<groupId>com.sun.xml.messaging.saaj</groupId>
+			<artifactId>saaj-impl</artifactId>
+			<version>1.3.3</version>
+		</dependency>               		                  	
+	</dependencies>	
+	
+	<build>
+		<finalName>EcheanceStock</finalName>			
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<!-- Remplacement des locations pour le client WS : -->
+			<!-- pour ajout le fichier de context et le modifier selon le profile utilisé -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<containerConfigXML>src/main/webapp/META-INF/context.xml</containerConfigXML>					
+					<webResources>
+						<resource>
+							<directory>src/main/webapp/META-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>META-INF</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>enforce-property</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireProperty>
+									<property>project.profiles</property>
+									<message>"Le projet doit etre compiler avec un profile prod, recette, integration ou local."</message>
+									<regex>.*( -P )*.</regex>						 
+								</requireProperty>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>	
+			-->
+		</plugins>
+		<resources>
+			<!-- 
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>META-INF/persistence.xml</include>
+				</includes>
+			</resource>
+			-->
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>sae.properties</include>
+				</includes>
+			</resource>								
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>log4j.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>data.xsd</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>ua.xsd</include>
+				</includes>
+			</resource>			
+		</resources>
+	</build>
+	<profiles>
+		<!-- LOCAL -->
+		<profile>
+			<id>local</id>
+			<properties>
+				<!-- DB infos -->					
+				<db.sae.connectionURL.SAE>jdbc:jtds:sqlserver://localhost:1433/SAE;instance=MSSQL2008</db.sae.connectionURL.SAE>
+				<db.sae.connectionURL.INFOCLIENT>jdbc:jtds:sqlserver://localhost:1433/INFOCLIENT;instance=MSSQL2008</db.sae.connectionURL.INFOCLIENT>
+				<db.sae.username>sa</db.sae.username>
+				<db.sae.password>LaC0urneuve</db.sae.password>
+				
+				<db.sae.connectionURL.SAE.test>jdbc:jtds:sqlserver://localhost:1433/SAE_TEST;instance=MSSQL2008</db.sae.connectionURL.SAE.test>
+				<db.sae.connectionURL.INFOCLIENT.test>jdbc:jtds:sqlserver://localhost:1433/INFOCLIENT_TEST;instance=MSSQL2008</db.sae.connectionURL.INFOCLIENT.test>
+				<db.sae.username.test>sa</db.sae.username.test>
+				<db.sae.password.test>LaC0urneuve</db.sae.password.test>
+				
+				
+				<!-- Properties file -->
+				<file.sae.dir.export>C:/Configurations_SGDE/sae/</file.sae.dir.export>			
+				<file.sae.dir.numrsortie>C:/Configurations_SGDE/sae/NUMRSORTIE</file.sae.dir.numrsortie>
+				<file.sae.dir.ziptmp>C:/Configurations_SGDE/sae/ZIPTMP</file.sae.dir.ziptmp>
+				<file.sae.dir.tmp>C:/Configurations_SGDE/sae/temp</file.sae.dir.tmp>
+				<file.sae.dir.zipsortie>C:/Configurations_SGDE/sae/ZIPSORTIE</file.sae.dir.zipsortie>
+				<file.sae.dir.csvsortie>C:/Configurations_SGDE/sae/CSV_FAX_SORTIE</file.sae.dir.csvsortie>
+				<file.sae.dir.csvtmp>C:/Configurations_SGDE/sae/CSV_FAX_TMP</file.sae.dir.csvtmp>	
+				<file.sae.dir.path.ok>C:/Configurations_SGDE/sae/ACK/ok</file.sae.dir.path.ok>
+				<file.sae.dir.path.archive>C:/Configurations_SGDE/sae/ACK/archive</file.sae.dir.path.archive>
+				<file.sae.xsd.data>C:/Workspace/AppSAEMTOM/trunk/src/main/resources/data.xsd</file.sae.xsd.data>
+				<file.sae.xsd.ua>C:/Workspace/AppSAEMTOM/trunk/src/main/resources/ua.xsd</file.sae.xsd.ua>				
+												
+				<file.sae.name.sequence.export>SAE_Export</file.sae.name.sequence.export>				
+				<file.sae.dir.separateur>/</file.sae.dir.separateur>
+				<file.sae.nb.export>5000</file.sae.nb.export>
+				<sae.delai.retention.purge>20</sae.delai.retention.purge>
+				<sae.delai.retention.clean>20</sae.delai.retention.clean>
+				<sae.password.export>xxxxxx</sae.password.export>
+				<sae.username.export>xxxxxx</sae.username.export>
+				
+				<!-- Properties Mail -->
+				<file.sae.liste.extelia>ansoumane.camara3@docapost-bpo.com</file.sae.liste.extelia>
+				<file.sae.liste.gdf>anscamou@yahoo.fr</file.sae.liste.gdf>
+				<file.sae.notificateur>SAE.LOCAL@docapost-bpo.com</file.sae.notificateur>				
+				<file.sae.serveur.smtp>smtpmrs.prod.extelia.fr</file.sae.serveur.smtp>
+								
+				<!-- Notification -->
+				<file.sae.name.sequence.ack>AAAA_NOTIF</file.sae.name.sequence.ack>	
+				<file.sae.dir.numrsortieack>C:/Configurations_SGDE/sae/NUMRSORTIEACK</file.sae.dir.numrsortieack>				
+				<file.sae.dir.ack.path>C:/Configurations_SGDE/sae/input</file.sae.dir.ack.path>
+				<file.sae.dir.ack.path.manu>C:/Configurations_SGDE/sae/input_manu</file.sae.dir.ack.path.manu>
+				<file.sae.dir.ack.temp>C:/Configurations_SGDE/sae/ACK/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.ack.zipsortie>C:/Configurations_SGDE/sae/ACK/ZIPSORTIEACK</file.sae.dir.ack.zipsortie>				
+				<file.sae.dir.path.import.sbb23>C:/Configurations_SGDE/sae/ACK/SBB23</file.sae.dir.path.import.sbb23>
+				<file.sae.dir.path.import.sbb2122.ligne2>C:/Configurations_SGDE/sae/ACK/SBB2122</file.sae.dir.path.import.sbb2122.ligne2>
+				<file.sae.dir.path.import.sbb2122>C:/Configurations_SGDE/sae/ACK/SBB2122</file.sae.dir.path.import.sbb2122>
+				<file.sae.dir.path.import.sbb26>C:/Configurations_SGDE/sae/ACK/SBB26</file.sae.dir.path.import.sbb26>
+				<file.sae.dir.export.ack.sortie>C:/Configurations_SGDE/sae/ACK/sortie</file.sae.dir.export.ack.sortie>
+				<file.sae.rules.notification>C:/Workspace/AppSAEMTOM/trunk/src/main/resources/notificationsErreurs.xls</file.sae.rules.notification>				
+				<file.sae.dir.ziplog>C:/Configurations_SGDE/sae/CSV</file.sae.dir.ziplog>				
+				<file.sae.dir.ziplogtmp>C:/Configurations_SGDE/sae/CSV_TMP</file.sae.dir.ziplogtmp>	
+				<file.sae.dir.ziplogarchive>C:/Configurations_SGDE/sae/CSV_ARCHIVE</file.sae.dir.ziplogarchive>	
+				<file.sae.archive>true</file.sae.archive>	
+				<file.notif.max.lot>500</file.notif.max.lot>		
+								
+				<!-- URL Web Service -->
+				<url.webservice>http://localhost:8080/AppSAE/</url.webservice>
+				<application.url>http://localhost:8080/AppSAE/sae</application.url>
+				<application.environement>local</application.environement>			
+				
+				<!-- Log 4 j -->
+				<sae.appender.file>C:/Phenix_Installation_Serveur/SAE/logs/appSAE.log</sae.appender.file>				
+			</properties>
+		</profile>		
+		<profile>
+			<id>recette</id>
+			<properties>
+				<!-- DB infos -->				
+				<db.sae.connectionURL.SAE>jdbc:jtds:sqlserver://172.20.100.149:1433/SAE;instance=MSSQL2008;useCursors=true</db.sae.connectionURL.SAE>
+				<db.sae.connectionURL.INFOCLIENT>jdbc:jtds:sqlserver://172.20.100.149:1433/INFOCLIENT;instance=MSSQL2008;useCursors=true</db.sae.connectionURL.INFOCLIENT>
+				<db.sae.username>PhenixUser</db.sae.username>
+				<db.sae.password>PhxUsr</db.sae.password>
+				
+				<db.sae.connectionURL.SAE.test>jdbc:jtds:sqlserver://172.20.100.149:1433/SAE_TEST;instance=MSSQL2008;useCursors=true</db.sae.connectionURL.SAE.test>
+				<db.sae.connectionURL.INFOCLIENT.test>jdbc:jtds:sqlserver://172.20.100.149:1433/INFOCLIENT_TEST;instance=MSSQL2008;useCursors=true</db.sae.connectionURL.INFOCLIENT.test>
+				<db.sae.username.test>PhenixUser</db.sae.username.test>
+				<db.sae.password.test>PhxUsr</db.sae.password.test>
+				
+				<!-- Properties file -->
+				<file.sae.dir.export>C:/GDF/SAE</file.sae.dir.export>				
+				<file.sae.dir.numrsortie>C:/GDF/SAE/NUMRSORTIE</file.sae.dir.numrsortie>
+				<file.sae.dir.numrsortieack>C:/GDF/SAE/NUMRSORTIEACK</file.sae.dir.numrsortieack>
+				<file.sae.dir.ziptmp>C:/GDF/SAE/ZIPTMP</file.sae.dir.ziptmp>
+				<file.sae.dir.tmp>C:/GDF/SAE/temp</file.sae.dir.tmp>
+				<file.sae.dir.zipsortie>C:/GDF/SAE/ZIPSORTIE</file.sae.dir.zipsortie>	
+				<file.sae.dir.csvsortie>C:/GDF/SAE/CSV_FAX_SORTIE</file.sae.dir.csvsortie>
+				<file.sae.dir.csvtmp>C:/GDF/SAE/CSV_FAX_TMP</file.sae.dir.csvtmp>				
+				<file.sae.xsd.ua>C:/GDF/SAE/DATA/xsd/ua.xsd</file.sae.xsd.ua>
+				<file.sae.xsd.data>C:/GDF/SAE/DATA/xsd/data.xsd</file.sae.xsd.data>
+				<file.sae.dir.ziplog>C:/GDF/SAE/CSV</file.sae.dir.ziplog>				
+				<file.sae.dir.ziplogtmp>C:/GDF/SAE/CSV_TMP</file.sae.dir.ziplogtmp>		
+				<file.sae.dir.ziplogarchive>C:/GDF/SAE/CSV_ARCHIVE</file.sae.dir.ziplogarchive>	
+								
+				<file.sae.dir.separateur>/</file.sae.dir.separateur>
+				<file.sae.nb.export>5000</file.sae.nb.export>
+				<sae.delai.retention.purge>20</sae.delai.retention.purge>
+				<sae.delai.retention.clean>20</sae.delai.retention.clean>	
+				<file.sae.name.sequence.export>NNNNNN_SAE_Export</file.sae.name.sequence.export>
+				<file.sae.name.sequence.ack>AAAA_NOTIF</file.sae.name.sequence.ack>
+				<sae.password.export>xxxxxx</sae.password.export>
+				<sae.username.export>xxxxxx</sae.username.export>
+							
+				<!-- Properties Mail -->			
+				<file.sae.serveur.smtp>smtpmrs.prod.extelia.fr</file.sae.serveur.smtp>
+				<file.sae.liste.extelia>belaid.irmeche3@docapost-bpo.com;anis.adrouche3@docapost-bpo.com;thomas.duquennoy3@docapost-bpo.com</file.sae.liste.extelia>
+				<file.sae.liste.gdf>belaid.irmeche3@docapost-bpo.com;anis.adrouche3@docapost-bpo.com;thomas.duquennoy3@docapost-bpo.com</file.sae.liste.gdf>
+				<file.sae.notificateur>SAE.RECETTE@docapost-bpo.com</file.sae.notificateur>
+				
+				<!-- Notification -->
+				<file.sae.dir.numrsortieack>C:/GDF/SAE/NUMRSORTIEACK</file.sae.dir.numrsortieack>
+				<file.sae.dir.ack.temp>C:/GDF/SAE/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.ack.zipsortie>C:/GDF/SAE/ZIPSORTIEACK</file.sae.dir.ack.zipsortie>
+				<file.sae.dir.path.ok>C:/GDF/SAE/ok</file.sae.dir.path.ok>
+				<file.sae.dir.path.archive>C:/GDF/SAE/archive</file.sae.dir.path.archive>					
+				<file.sae.dir.path.import.sbb23>C:/GDF/CNDS/ACK</file.sae.dir.path.import.sbb23>
+				<file.sae.dir.path.import.sbb2122>C:/GDF/COURRIERS/ACK</file.sae.dir.path.import.sbb2122>
+				<file.sae.dir.path.import.sbb2122.ligne2>C:/GDF/COURRIERS/ACK</file.sae.dir.path.import.sbb2122.ligne2>
+				<file.sae.dir.path.import.sbb26>C:/GDF/FAXS/ACK</file.sae.dir.path.import.sbb26>
+				<file.sae.rules.notification>C:/GDF/SAE/rules/notificationsErreurs.xls</file.sae.rules.notification>								
+				<file.sae.dir.ack.path>C:/GDF/SAE/import</file.sae.dir.ack.path>
+				<file.sae.dir.ack.path.manu>C:/GDF/SAE/import_manu</file.sae.dir.ack.path.manu>
+				<file.sae.dir.ack.temp>C:/GDF/SAE/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.export.ack.sortie>C:/GDF/SAE/ZIPSORTIEACK</file.sae.dir.export.ack.sortie>								
+				<file.sae.archive>true</file.sae.archive>
+				<file.notif.max.lot>500</file.notif.max.lot>
+											
+				<!-- URL Web Service -->
+				<url.webservice>http://172.20.100.151:8083/AppSAE/</url.webservice>	
+				<application.url>http://172.20.100.151:8082/AppSAE/sae</application.url>
+				<application.environement>recette</application.environement>
+				
+				<!-- Log 4 j -->
+				<sae.appender.file>E:/PhenixV22/PhenixGDFFAXS32/logs/sae-server.log</sae.appender.file>					
+			</properties>
+		</profile>
+		<!-- PROD -->
+		<profile>
+			<id>prod</id>			
+			<properties>
+				<!-- DB infos -->				  
+		        <db.sae.connectionURL.SAE>jdbc:jtds:sqlserver://172.20.100.146:1433/SAE;instance=MSSQL2008</db.sae.connectionURL.SAE>
+				<db.sae.connectionURL.INFOCLIENT>jdbc:jtds:sqlserver://172.20.100.146:1433/INFOCLIENT;instance=MSSQL2008</db.sae.connectionURL.INFOCLIENT>
+				 <db.sae.username>PhenixUser</db.sae.username>
+		        <db.sae.password>PhxUsr</db.sae.password> 
+		        
+				<db.sae.connectionURL.SAE.test>jdbc:jtds:sqlserver://172.20.100.149:1433/SAE;instance=MSSQL2008</db.sae.connectionURL.SAE.test>
+				<db.sae.connectionURL.INFOCLIENT.test>jdbc:jtds:sqlserver://172.20.100.149:1433/INFOCLIENT;instance=MSSQL2008</db.sae.connectionURL.INFOCLIENT.test>
+				 <db.sae.username.test>PhenixUser</db.sae.username.test>
+		        <db.sae.password.test>PhxUsr</db.sae.password.test> 
+												
+				<!-- Properties file -->
+				<file.sae.dir.separateur>/</file.sae.dir.separateur>
+		        <file.sae.dir.export>E:/SAE</file.sae.dir.export>				
+				<file.sae.dir.numrsortie>E:/SAE/NUMRSORTIE</file.sae.dir.numrsortie>
+				<file.sae.dir.numrsortieack>E:/SAE/NUMRSORTIEACK</file.sae.dir.numrsortieack>
+				<file.sae.dir.ziptmp>E:/SAE/ZIPTMP</file.sae.dir.ziptmp>
+				<file.sae.dir.tmp>E:/SAE/temp</file.sae.dir.tmp>
+				<file.sae.dir.csvsortie>E:/SAE/CSV_FAX_SORTIE</file.sae.dir.csvsortie>
+				<file.sae.dir.csvtmp>E:/SAE/CSV_FAX_TMP</file.sae.dir.csvtmp>	
+				<file.sae.dir.zipsortie>//172.20.100.147/ShareSBB6/Flux/Sortant/SAE</file.sae.dir.zipsortie>
+				<file.sae.dir.ziplog>E:/SAE/CSV</file.sae.dir.ziplog>				
+				<file.sae.dir.ziplogtmp>E:/SAE/CSV_TMP</file.sae.dir.ziplogtmp>	
+				<file.sae.dir.ziplogarchive>E:/SAE/CSV_ARCHIVE</file.sae.dir.ziplogarchive>							
+				<file.sae.xsd.ua>E:/SAE/xsd/ua.xsd</file.sae.xsd.ua>
+				<file.sae.xsd.data>E:/SAE/xsd/data.xsd</file.sae.xsd.data>
+				
+				<file.sae.name.sequence.export>NNNNNN_SAE_Export</file.sae.name.sequence.export>				
+				<file.sae.nb.export>5000</file.sae.nb.export>
+				<sae.delai.retention.purge>20</sae.delai.retention.purge>
+				<sae.delai.retention.clean>20</sae.delai.retention.clean>
+				<sae.password.export>xxxxxx</sae.password.export>
+				<sae.username.export>xxxxxx</sae.username.export>
+				
+				<!-- Properties Mail -->
+				<file.sae.liste.extelia>belaid.irmeche3@docapost-bpo.com;anis.adrouche3@docapost-bpo.com;thomas.duquennoy3@docapost-bpo.com;thierry.pham@docapost-bpo.com;stephane.monin@docapost-bpo.com</file.sae.liste.extelia>
+				<file.sae.liste.gdf>Gestion.Clients-SP@docapost-bpo.com;anna.leroy@docapost-bpo.com;michele.agamis@gdfsuez.com;marie-noel.eyengaondoa@external.gdfsuez.com;lydie.bras@gdfsuez.com;frederic.mendes@external.gdfsuez.com;jean-marie.ganzer@gdfsuez.com;direction-dsig-editique@gdfsuez.com;jean-francois.kodyra@gdfsuez.com;dsi-one-it-symphonie-integration@gdfsuez.com</file.sae.liste.gdf>
+				<file.sae.notificateur>SAE@docapost-bpo.com</file.sae.notificateur>				
+				<file.sae.serveur.smtp>smtpmrs.prod.extelia.fr</file.sae.serveur.smtp>
+												
+				<!-- Notification -->							
+				<file.sae.rules.notification>E:/SAE/rules/notificationsErreurs.xls</file.sae.rules.notification>								
+				<file.sae.dir.ack.path>//172.20.100.147/ShareSBB6/Flux/Entrant/SAE_ACK</file.sae.dir.ack.path>
+				<file.sae.dir.ack.path.manu>E:/SAE/ACK/import_manu</file.sae.dir.ack.path.manu>
+				<file.sae.dir.path.import.sbb23>//172.20.100.147/ShareSBB6/Flux/Entrant/CND_ACK</file.sae.dir.path.import.sbb23>
+				<file.sae.dir.path.import.sbb26>//172.20.100.147/ShareSBB6/Flux/Entrant/FAX_ACK</file.sae.dir.path.import.sbb26>
+				<file.sae.dir.path.import.sbb2122>//172.20.100.147/ShareSBB6/Flux/Entrant/COUR_ACK</file.sae.dir.path.import.sbb2122>
+				<file.sae.dir.path.import.sbb2122.ligne2>I:/SAE/Notifications</file.sae.dir.path.import.sbb2122.ligne2>
+				
+				<file.sae.dir.path.ok>E:/SAE/ACK/ok</file.sae.dir.path.ok>
+				<file.sae.dir.path.archive>E:/SAE/ACK/archive</file.sae.dir.path.archive>
+				<file.sae.dir.ack.temp>E:/SAE/ACK/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.export.ack.sortie>E:/SAE/ACK/ZIPSORTIEACK</file.sae.dir.export.ack.sortie>								
+				<file.sae.dir.ack.zipsortie>E:/SAE/ACK/ZIPSORTIEACK</file.sae.dir.ack.zipsortie>			
+				<file.sae.name.sequence.ack>AAAA_NOTIF</file.sae.name.sequence.ack>				
+				<file.sae.archive>true</file.sae.archive>
+				<file.notif.max.lot>500</file.notif.max.lot>
+				
+				<!-- URL Web Service -->
+				<url.webservice>http://172.20.100.141:8085/AppSAE/</url.webservice>
+				<application.url>http://172.20.100.141:8085/AppSAE/sae</application.url>
+				<application.environement>prod</application.environement>
+				
+				<!-- Log 4 j -->
+				<sae.appender.file>E:/PhenixV23/PhenixGDFWSCPT/logs/sae-server.log</sae.appender.file>		     	
+		     </properties>
+		</profile>
+		<!-- DEVELOPPEMENT -->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<!-- DB infos -->				
+				<db.sae.connectionURL.SAE>jdbc:jtds:sqlserver://localhost:1433/SAE;instance=GDFDEV;useCursors=true</db.sae.connectionURL.SAE>
+				<db.sae.connectionURL.INFOCLIENT>jdbc:jtds:sqlserver://localhost:1433/INFOCLIENT;instance=GDFDEV;useCursors=true</db.sae.connectionURL.INFOCLIENT>
+				<db.sae.username>sa</db.sae.username>
+				<db.sae.password>Docapost2014</db.sae.password>
+				
+				<db.sae.connectionURL.SAE.test>jdbc:jtds:sqlserver://localhost:1433/SAE_TEST;instance=GDFDEV;useCursors=true</db.sae.connectionURL.SAE.test>
+				<db.sae.connectionURL.INFOCLIENT.test>jdbc:jtds:sqlserver://localhost:1433/INFOCLIENT_TEST;instance=GDFDEV;useCursors=true</db.sae.connectionURL.INFOCLIENT.test>
+				<db.sae.username.test>sa</db.sae.username.test>
+				<db.sae.password.test>Docapost2014</db.sae.password.test>
+				
+				<!-- Properties file -->
+				<file.sae.dir.export>E:/Sorties/SAE</file.sae.dir.export>				
+				<file.sae.dir.numrsortie>E:/Sorties/SAE/NUMRSORTIE</file.sae.dir.numrsortie>
+				<file.sae.dir.numrsortieack>E:/Sorties/SAE/NUMRSORTIEACK</file.sae.dir.numrsortieack>
+				<file.sae.dir.ziptmp>E:/Sorties/SAE/ZIPTMP</file.sae.dir.ziptmp>
+				<file.sae.dir.tmp>E:/Sorties/SAE/temp</file.sae.dir.tmp>
+				<file.sae.dir.zipsortie>E:/Sorties/SAE/ZIPSORTIE</file.sae.dir.zipsortie>
+				<file.sae.dir.csvsortie>E:/Sorties/SAE/CSV_FAX_SORTIE</file.sae.dir.csvsortie>	
+				<file.sae.dir.csvtmp>EE:/Sorties/SAE/CSV_FAX_TMP</file.sae.dir.csvtmp>				
+				<file.sae.xsd.ua>E:/Sorties/SAE/DATA/xsd/ua.xsd</file.sae.xsd.ua>
+				<file.sae.xsd.data>E:/Sorties/SAE/DATA/xsd/data.xsd</file.sae.xsd.data>
+				<file.sae.dir.ziplog>E:/Sorties/SAE/CSV</file.sae.dir.ziplog>				
+				<file.sae.dir.ziplogtmp>E:/Sorties/SAE/CSV_TMP</file.sae.dir.ziplogtmp>		
+				<file.sae.dir.ziplogarchive>E:/Sorties/SAE/CSV_ARCHIVE</file.sae.dir.ziplogarchive>	
+								
+				<file.sae.dir.separateur>/</file.sae.dir.separateur>
+				<file.sae.nb.export>5000</file.sae.nb.export>
+				<sae.delai.retention.purge>20</sae.delai.retention.purge>
+				<sae.delai.retention.clean>20</sae.delai.retention.clean>	
+				<file.sae.name.sequence.export>NNNNNN_SAE_Export</file.sae.name.sequence.export>
+				<file.sae.name.sequence.ack>AAAA_NOTIF</file.sae.name.sequence.ack>
+				<sae.password.export>xxxxxx</sae.password.export>
+				<sae.username.export>xxxxxx</sae.username.export>
+							
+				<!-- Properties Mail -->			
+				<file.sae.serveur.smtp>smtpmrs.prod.extelia.fr</file.sae.serveur.smtp>
+				<file.sae.liste.extelia>olivier.bontemps3@docapost-bpo.com;belaid.irmeche3@docapost-bpo.com</file.sae.liste.extelia>
+				<file.sae.liste.gdf>olivier.bontemps3@docapost-bpo.com;belaid.irmeche3@docapost-bpo.com</file.sae.liste.gdf>
+				<file.sae.notificateur>SAE.DEV@docapost-bpo.com</file.sae.notificateur>
+				
+				<!-- Notification -->
+				<file.sae.dir.numrsortieack>E:/Sorties/SAE/NUMRSORTIEACK</file.sae.dir.numrsortieack>
+				<file.sae.dir.ack.temp>E:/Sorties/SAE/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.ack.zipsortie>E:/Sorties/SAE/ZIPSORTIEACK</file.sae.dir.ack.zipsortie>
+				<file.sae.dir.path.ok>E:/Sorties/SAE/ok</file.sae.dir.path.ok>
+				<file.sae.dir.path.archive>E:/Sorties/SAE/archive</file.sae.dir.path.archive>					
+				<file.sae.dir.path.import.sbb23>E:/Sorties/CNDS/ACK</file.sae.dir.path.import.sbb23>
+				<file.sae.dir.path.import.sbb2122>E:/Sorties/COURRIERS/ACK</file.sae.dir.path.import.sbb2122>
+				<file.sae.dir.path.import.sbb2122.ligne2>E:/Sorties/COURRIERS/ACK</file.sae.dir.path.import.sbb2122.ligne2>
+				<file.sae.dir.path.import.sbb26>E:/Sorties/FAXS/ACK</file.sae.dir.path.import.sbb26>
+				<file.sae.rules.notification>E:/Sorties/SAE/rules/notificationsErreurs.xls</file.sae.rules.notification>								
+				<file.sae.dir.ack.path>E:/Sorties/SAE/import</file.sae.dir.ack.path>
+				<file.sae.dir.ack.path.manu>E:/Sorties/SAE/import_manu</file.sae.dir.ack.path.manu>
+				<file.sae.dir.ack.temp>E:/Sorties/SAE/TEMPACK</file.sae.dir.ack.temp>
+				<file.sae.dir.export.ack.sortie>E:/Sorties/SAE/ZIPSORTIEACK</file.sae.dir.export.ack.sortie>								
+				<file.sae.archive>true</file.sae.archive>
+				<file.notif.max.lot>500</file.notif.max.lot>
+											
+				<!-- URL Web Service -->
+				<url.webservice>http://localhost:8083/AppSAE/</url.webservice>	
+				<application.url>http://localhost:8083/AppSAE/sae</application.url>
+				<application.environement>dev</application.environement>
+				
+				<!-- Log 4 j -->
+				<sae.appender.file>E:/Logs/SAE/sae-server.log</sae.appender.file>					
+			</properties>
+		</profile>
+	</profiles>		
+</project>

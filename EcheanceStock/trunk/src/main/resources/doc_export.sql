@@ -1,0 +1,35 @@
+GO
+
+/****** Object:  Table [dbo].[DOCS_EXPORT]    Script Date: 10/01/2012 11:39:48 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+IF OBJECT_ID(N'DOCS_EXPORT',N'U') IS NOT NULL DROP TABLE [dbo].[DOCS_EXPORT]
+CREATE TABLE [dbo].[DOCS_EXPORT](
+	[numero_id] [varchar](255) NOT NULL,
+	[date_creation] [datetime] NULL,
+	[date_update] [datetime] NULL,
+	[metadata] [image] NULL,
+	[piece_jointe] [image] NULL,
+	[prestation] [int] NOT NULL,
+	[status] [int] NOT NULL,
+	[lot_id] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[numero_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[numero_id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO

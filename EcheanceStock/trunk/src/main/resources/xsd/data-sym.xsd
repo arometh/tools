@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="fields" maxOccurs="unbounded" />
+        <xs:element ref="documents" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fields">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name" />
+        <xs:element ref="region" />
+        <xs:element ref="is_region_once_per_page" />
+        <xs:element ref="is_index" />
+        <xs:element ref="is_doc_id" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="region" type="xs:string"/>
+  <xs:element name="is_region_once_per_page" type="xs:integer"/>
+  <xs:element name="is_index" type="xs:integer"/>
+  <xs:element name="is_doc_id" type="xs:integer"/>
+
+  <xs:element name="documents">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="application" />
+		<xs:element ref="nom" />
+		<xs:element ref="type_doc" />
+		<xs:element ref="date_creation" />
+		<xs:element ref="identifiant" />		
+        <xs:element ref="file_name" />
+        <xs:element name="pivot" />
+        
+      </xs:all>
+      <xs:attribute name="key" type="xs:NMTOKEN" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:element name="application">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_32">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>  
+
+  <xs:element name="nom">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_255">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>
+   
+  <xs:element name="type_doc">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_50">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>
+  
+  <xs:element name="date_creation">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="date_range">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="identifiant">
+   <xs:complexType>
+    <xs:simpleContent>
+     <xs:extension base="string_mandatory_max_30">
+      <xs:attribute name="page" type="xs:integer" fixed="1" use="required" />
+     </xs:extension>
+    </xs:simpleContent>
+   </xs:complexType> 	
+  </xs:element>  
+
+  <xs:element name="file_name" type="xs:string"/>
+  
+
+  
+  <!-- alphanumerique 30 -->
+  <xs:simpleType name="string_mandatory_max_30">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="30"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 32 -->
+  <xs:simpleType name="string_mandatory_max_32">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="32"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 50 -->
+  <xs:simpleType name="string_mandatory_max_50">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="50"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 250 -->
+  <xs:simpleType name="string_mandatory_max_250">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="250"/>
+   </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- alphanumerique 255 -->
+  <xs:simpleType name="string_mandatory_max_255">
+   <xs:restriction base="xs:string">
+    <xs:minLength value="1"/>
+    <xs:maxLength value="255"/>
+   </xs:restriction>
+  </xs:simpleType>
+
+  <!-- date -->  
+  <xs:simpleType name="date_range">
+    <xs:restriction base="xs:date">
+     <xs:minInclusive value="1900-01-01"/>
+     <xs:maxInclusive value="2100-12-31"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date_vide">
+    <xs:union memberTypes="date_range">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+        </xs:restriction>
+       </xs:simpleType>
+    </xs:union>
+   </xs:simpleType>
+</xs:schema>
+
+
