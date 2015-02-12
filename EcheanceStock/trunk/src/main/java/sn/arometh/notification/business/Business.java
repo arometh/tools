@@ -9,22 +9,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
-import fr.extelia.gdf.sae.commons.ConstantFunctionnals;
-import fr.extelia.gdf.sae.commons.SendMail;
-import fr.extelia.gdf.sae.commons.Tools;
-import fr.extelia.gdf.sae.dao.DAO;
-import fr.extelia.gdf.sae.entity.DocsExport;
 
 //@Transactional(readOnly=true)
 public class Business {	
-	private static Logger logger = Logger.getLogger(Business.class);		
+	/*private static Logger logger = Logger.getLogger(Business.class);		
 	private DAOImpl dao ;
 	
 	public Business(boolean isTest) {
 		dao = new DAOImpl(isTest);
 	}
 	
-	/**
+	*//**
 	 * Permet de créer dans la base de données l’entrée correspondante au couple <méta-données (metadata), pdf (images)>
 		<br> -	Attribution d’un numId.
 		<br> -	Extraction de la prestation de metadata
@@ -34,7 +29,7 @@ public class Business {
 		<br> -	Peuplement du blob avec images.
 	 * @param doc
 	 * @return
-	 */
+	 *//*
 	public boolean createDocument(DocsExport doc){		
 		try {
 			return dao.insertion(doc);	
@@ -44,11 +39,11 @@ public class Business {
 		}
 	}
 
-	/**
+	*//**
 	 * Cherche le documents matchant à l'id de document.
 	 * @param numId
 	 * @return
-	 */
+	 *//*
 	public DocsExport getDocumentByNumId(String numId){		
 		try {
 			logger.info("###################### numID ==> " + numId);
@@ -59,11 +54,11 @@ public class Business {
 		}		
 	}
 	
-	/**
+	*//**
 	 * Cherche le ou les documents matchant la liste des identifiants.
 	 * @param numIds
 	 * @return
-	 */
+	 *//*
 	public List<DocsExport> getDocumentsByNumIds(List<String> numIds) {
 		List<DocsExport> docs = new ArrayList<DocsExport>();
 		for(String numId : numIds){
@@ -72,13 +67,13 @@ public class Business {
 		return docs;
 	}
 	
-	/**
+	*//**
 	 * Retourne les documents dont le status est status
 	 * sans les pieces jointes qui sont lourdes a charger
 	 * 
 	 * @param status
 	 * @return DocsExport[]
-	 */
+	 *//*
 	public List<DocsExport> getDocumentByStatus(int status) {
 		try {
 			List<DocsExport> docs = dao.rechercheDocExportParStatus(status);
@@ -90,11 +85,11 @@ public class Business {
 	}
 	
 	
-	/**
+	*//**
 	 * Retourne les documents dont le status est status
 	 * @param status
 	 * @return DocsExport[]
-	 */
+	 *//*
 	public List<DocsExport> getDocumentByStatusSansPiecesJointes(int status) {
 		try {
 			List<DocsExport> docs = dao.rechercheDocExportParStatusSansPiencesJointes(status);
@@ -105,11 +100,11 @@ public class Business {
 		}
 	}
 	
-	/**
+	*//**
 	 * Cherche le ou les documents matchant la liste des status
 	 * @param status
 	 * @return la liste des documents correspondant à la liste des prestations status.
-	 */
+	 *//*
 	public List<DocsExport> getDocumentByStatus(int[] statuts, int limit) {
 		List<DocsExport> retour = new ArrayList<DocsExport>();
 		try {
@@ -139,11 +134,11 @@ public class Business {
 		}
 		return retour;
 	}
-	/**
+	*//**
 	 * Cherche le ou les documents matchant la liste des status
 	 * @param status
 	 * @return la liste des documents correspondant à la liste des prestations status.
-	 */
+	 *//*
 	public List<DocsExport> getDocumentByStatus(int status, int limit) {
 		try {
 			List<DocsExport> docs = dao.rechercheDocExportParStatusLimit(limit, status);
@@ -153,11 +148,11 @@ public class Business {
 			return null;
 		}
 	}	
-	/**
+	*//**
 	 * Retourne les documents dont la prestation est prestation
 	 * @param prestation
 	 * @return
-	 */
+	 *//*
 	public List<DocsExport> getDocumentsByPrestation(int prestation) {
 		try {
 			List<DocsExport> docs = dao.rechercheDocExportParPrestation(0, prestation);
@@ -168,11 +163,11 @@ public class Business {
 		}
 	}
 	
-	/**
+	*//**
 	 * Retourne les documents dont la prestation est prestation
 	 * @param prestation
 	 * @return
-	 */
+	 *//*
 	public List<DocsExport> getDocumentsByLotId(String lotId) {
 		try {
 			List<DocsExport> docs = dao.rechercheDocExportParLotId(0, lotId);
@@ -182,11 +177,11 @@ public class Business {
 			return null;
 		}
 	}
-	/**
+	*//**
 	 * 
 	 * @param lotId
 	 * @return
-	 */
+	 *//*
 	public int getNBDocumentByLotId(String lotId){
 		//return getDocumentsByLotId(lotId).size();
 		try {
@@ -197,12 +192,12 @@ public class Business {
 		}
 	}
 	
-	/**
+	*//**
 	 * Retourne les numeros de documents dont le lot est lotId
 	 * 
 	 * @param lotId identifiant du lot
 	 * @return liste des identifiants du lot
-	 */
+	 *//*
 	public List<String> getNumIdsByLotId(String lotId) {
 		try {
 			List<String> docs = dao.rechercheNumIdsParLotId(0, lotId);
@@ -213,13 +208,13 @@ public class Business {
 		}
 	}
 	
-	/**
+	*//**
 	 * Permet de mettre à jour un document apres changement de son status.
 	 * 
 	 * @param doc
 	 * @param setPJ a mettre a true si on souhaite mettre a jour les pieces jointes , pdf et xml
 	 * @return
-	 */
+	 *//*
 	public boolean updateDocumentAndCahngeStatus(DocsExport doc, boolean setPJ) {
 		boolean retour = false;		
 		try {
@@ -246,7 +241,7 @@ public class Business {
 					doc.setStatus(ConstantFunctionnals.STATUS_A_EXPORTER);
 					break;	
 					
-				/*	
+					
 				case ConstantFunctionnals.STATUS_A_REVIDEOCODER:
 					doc.setStatus(ConstantFunctionnals.STATUS_REVIDEOCODER);
 					break;
@@ -254,7 +249,7 @@ public class Business {
 				case ConstantFunctionnals.STATUS_REVIDEOCODER:
 					doc.setStatus(ConstantFunctionnals.STATUS_REEXPORTER);
 					break;
-				*/
+				
 										
 				case ConstantFunctionnals.STATUS_EXPORTER:
 					break;
@@ -277,13 +272,13 @@ public class Business {
 		return retour;		
 	}
 	
-	/**
+	*//**
 	 *  Permet de mettre à jour un document sans changer le statut status.
 	 *  
 	 * @param doc
 	 * @param setPJ a mettre a true si on souhaite mettre a jour les pieces jointes , pdf et xml
 	 * @return
-	 */
+	 *//*
 	public boolean updateDocument(DocsExport doc, boolean setPJ) {
 		boolean retour = false;		
 		try {
@@ -294,12 +289,12 @@ public class Business {
 		return retour;		
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @param numId
 	 * @param status
 	 * @return
-	 */
+	 *//*
 	public boolean updateDocumentStatusByNumId(String numId, int status) {
 		boolean retour = false;		
 		try {
@@ -310,13 +305,13 @@ public class Business {
 		return retour;	
 	}
 				
-	/**	 
+	*//**	 
 	 * 
 	 * @param docs
 	 * @param lot_id
 	 * @param status
 	 * @return
-	 */
+	 *//*
 	public boolean updateOtherDocuments(List<DocsExport> docs, String lot_id, int status) {
 		boolean retour = false;		
 		try {
@@ -346,10 +341,10 @@ public class Business {
 		}
 	}
 	
-	/**
+	*//**
 	 * Permet de purger tous les documents ayant le status 11 dans la table DOCS_EXPORT.
 	 * @throws ParseException 
-	 */
+	 *//*
 	public boolean purgeDocuments(int NB_JOUR_CLEAN) throws ParseException {
 		boolean retour = false;
 		try {
@@ -379,5 +374,5 @@ public class Business {
 	
 	public int getNbDocumentsAExporter(){
 		return dao.recupereTousLesDocAExport();
-	}	
+	}*/	
 }

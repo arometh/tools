@@ -5,13 +5,18 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import fr.extelia.gdf.sae.business.SAEBusiness;
-import fr.extelia.gdf.sae.commons.ConstantFunctionnals;
-import fr.extelia.gdf.sae.commons.SAEProperties;
-import fr.extelia.gdf.sae.scheduler.bean.CleannerBean;
+
+import sn.arometh.notification.commons.ConstantFunctionnals;
 
 public class NotifStockJob extends QuartzJobBean implements StatefulJob, ConstantFunctionnals{
-	private static Logger logger = Logger.getLogger(NotifStockJob.class);	
+
+	@Override
+	protected void executeInternal(JobExecutionContext arg0)
+			throws JobExecutionException {
+		// TODO Auto-generated method stub
+		
+	}
+	/*private static Logger logger = Logger.getLogger(NotifStockJob.class);	
 	private SAEBusiness saeCleannerBusiness;	
 	private CleannerBean cleannerBean;
 	private static int NB_JOUR_PURGE = 30;
@@ -63,5 +68,5 @@ public class NotifStockJob extends QuartzJobBean implements StatefulJob, Constan
 
 	public void setCleannerBean(CleannerBean cleannerBean) {
 		this.cleannerBean = cleannerBean;
-	}	
+	}	*/
 }

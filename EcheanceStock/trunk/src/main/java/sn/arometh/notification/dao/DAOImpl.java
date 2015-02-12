@@ -20,8 +20,9 @@ import javax.naming.NamingException;
 import org.apache.log4j.Logger;
 
 import sn.arometh.notification.commons.ConstantFunctionnals;
-import sn.arometh.notification.commons.Properties;
+import sn.arometh.notification.commons.PropertiesUtils;
 import sn.arometh.notification.commons.SendMail;
+import sn.arometh.notification.entity.Stock;
 import sn.arometh.notification.entity.StockOutOfDate;
 import sn.arometh.notification.entity.StockQuant;
 
@@ -110,12 +111,7 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
 						
 			rs = select.executeQuery();
 			
-			StockQuant stock;
-			while (rs.next()) {	
-				stock = new StockQuant();
-				//TODO remplir les champs lies au stock
-				stockLimite.add((T) stock);
-			}
+			loadStock(rs);
 		}catch(Exception e) {
 			logger.error("Erreur : ", e);
 			
@@ -152,7 +148,22 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
 		return stockLimite;
 	}
 	
-	
+	/**
+	 * 
+	 * @param pResultSet
+	 * @return
+	 * @throws SQLException
+	 */
+	private <T> List<T>  loadStock(ResultSet pResultSet) throws SQLException {
+		List<T>  stockLimite= (List<T>) new ArrayList<StockQuant>();
+		Stock stock;
+		while (pResultSet.next()) {	
+			stock = new Stock();
+			//TODO remplir les champs lies au stock
+			stockLimite.add((T) stock);
+		}
+		return stockLimite;
+	}
 /*	
 	public List<DocsExport> rechercheDocExportParStatusLimit(int limit, int status){
 		List<DocsExport> retour =  new ArrayList<DocsExport>();

@@ -1,20 +1,22 @@
 package sn.arometh.notification.commons;
 
 
+
 import java.util.Properties;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import org.openl.util.Log;
+//import org.openl.util.Log;
 
 /**
  * Envoyer un email
  */
 public class SendMail {	
-	private static final String smtpHost = Properties.getPropertiesValues("mail.sae.serveur.smtp"); 
-	private static final String notificateur = Properties.getPropertiesValues("mail.sae.notificateur");
-	private static final String to = Properties.getPropertiesValues("mail.sae.liste.extelia");
-	private static final String liste_extelia = Properties.getPropertiesValues("mail.sae.liste.extelia");
+	private static final String smtpHost = PropertiesUtils.getPropertiesValues("mail.sae.serveur.smtp"); 
+	private static final String notificateur = PropertiesUtils.getPropertiesValues("mail.sae.notificateur");
+	private static final String to = PropertiesUtils.getPropertiesValues("mail.sae.liste.extelia");
+	private static final String liste_extelia = PropertiesUtils.getPropertiesValues("mail.sae.liste.extelia");
 	
 	/**
 	 * 
@@ -100,7 +102,7 @@ public class SendMail {
 		try {
 			sendMail(sujet, message, destinatairesExtelia);
 		}catch(Exception e){
-			Log.error("Erreur.", e);
+			//Log.error("Erreur.", e);
 		}
 	}
 	

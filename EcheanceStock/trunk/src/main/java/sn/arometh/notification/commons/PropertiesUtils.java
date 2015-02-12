@@ -6,12 +6,12 @@ import java.util.ResourceBundle;
  * @author Ansoumane Camara
  * Classe de récupération des properties
  */
-public class Properties {
+public class PropertiesUtils {
       private static ResourceBundle resourceSAE;
       private static String properties = "sae";
       
-      public Properties(String properties){
-    	  Properties.setProperties(properties);
+      public PropertiesUtils(String properties){
+    	  PropertiesUtils.setProperties(properties);
       }
             
       static {
@@ -28,7 +28,7 @@ public class Properties {
       }
 
 	public static void setProperties(String properties) {
-		Properties.properties = properties;
+		PropertiesUtils.properties = properties;
 	}
 
 	public static String getProperties() {
