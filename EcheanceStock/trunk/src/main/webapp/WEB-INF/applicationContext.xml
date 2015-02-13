@@ -17,151 +17,40 @@
         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">		
 		
     <!-- Quartz Bean -->
-	<bean id="lotissementBean" class="fr.extelia.gdf.sae.scheduler.bean.LotissementBean">
-		<property name="nameScheduler" value="Scheduler de Lotissement" />
-	</bean>
-	
-	<bean id="logExportZipBean" class="fr.extelia.gdf.sae.scheduler.bean.LogExportZipBean">
-		<property name="nameScheduler" value="Scheduler de log export zip INFOCLIENT" />
-	</bean>
-	
-	<bean id="notificationBeanAUTO" class="fr.extelia.gdf.sae.scheduler.bean.NotificationBean">
-		<property name="nameScheduler" value="Scheduler de notification AUTO" />
-		<property name="type" value="AUTO" />		
-	</bean>
-	
-	<bean id="notificationBeanMANU" class="fr.extelia.gdf.sae.scheduler.bean.NotificationBean">
-		<property name="nameScheduler" value="Scheduler de notification MANU" />
-		<property name="type" value="MANU" />		
-	</bean>
-	
-	<bean id="purgeBean" class="fr.extelia.gdf.sae.scheduler.bean.PurgeBean">
-		<property name="nameScheduler" value="Scheduler de Purge" />
-	</bean>
-		
-	<bean id="cleannerBean" class="fr.extelia.gdf.sae.scheduler.bean.CleannerBean">
-		<property name="nameScheduler" value="Scheduler de Nettoyage" />
+	<bean id="gestionNotificationBean" class="sn.arometh.notification.bean.GestionNotificationStockBean">
+		<property name="nameScheduler" value="Scheduler de Gestion d'envoie des mails de notifications" />
 	</bean>
 
 	<!-- Scheduler Lotissement  -->
-	<bean name="jobLotissementDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.LotissementJob" />
+	<bean name="jobGestionNotificationDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="sn.arometh.notification.job.GestionNotificationStockJob" />
 		<property name="jobDataAsMap">
 			<map>
-				<entry key="lotissementBean">
-					<ref bean="lotissementBean" />					
-				</entry>
-			</map>
-		</property>		
-	</bean>
-	
-	<!-- Log Export Zip -->
-	<bean name="jobExportZipDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.LogExportZipJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="logExportZipBean">
-					<ref bean="logExportZipBean" />					
-				</entry>
-			</map>
-		</property>		
-	</bean>
-	
-	<!-- Notification -->
-	<bean name="jobNotificationDetailAUTO" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.NotificationJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="notificationBean">
-					<ref bean="notificationBeanAUTO" />
-				</entry>
-			</map>
-		</property>		
-	</bean>
-	
-	<bean name="jobNotificationDetailMANU" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.NotificationJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="notificationBean">
-					<ref bean="notificationBeanMANU" />
-				</entry>
-			</map>
-		</property>		
-	</bean>
-	
-	<!-- Purge -->
-	<bean name="jobPurgeDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.PurgeJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="purgeBean">
-					<ref bean="purgeBean" />					
-				</entry>
-			</map>
-		</property>		
-	</bean>
-		
-	<!-- Cleaner -->
-	<bean name="jobCleannerDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
-		<property name="jobClass" value="fr.extelia.gdf.sae.scheduler.job.CleannerJob" />
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="cleannerBean">
-					<ref bean="cleannerBean" />					
+				<entry key="gestionNotificationBean">
+					<ref bean="gestionNotificationBean" />					
 				</entry>
 			</map>
 		</property>		
 	</bean>
 			
 	<!-- Paramétrage des jobs -->
-	<bean id="jobLotissement14hTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobLotissementDetail" />
+	<bean id="jobGestionNotificationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobGestionNotificationDetail" />
 		<property name="cronExpression" value="0 15 14 * * ?" />
 	</bean>
 	
-	<bean id="jobLotissement18hTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<!-- <bean id="jobLotissement18hTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="jobLotissementDetail" />
 		<property name="cronExpression" value="0 5 18 * * ?" />
-	</bean>
-	
-	<bean id="jobExportZipTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobExportZipDetail" />
-		<property name="cronExpression" value="0 30,45 14,18,19 * * ?" />
-	</bean>
-	
-	<bean id="jobNotificationTriggerAUTO" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobNotificationDetailAUTO" />
-		<property name="cronExpression" value="0 10 5,6,7,11 * * ?" />
-	</bean>
-	
-	<bean id="jobNotificationTriggerMANU" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobNotificationDetailMANU" />
-		<property name="cronExpression" value="0 0/5 * * * ?" />
-	</bean>
-	
-	<bean id="jobPurgeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobPurgeDetail" />
-		<property name="cronExpression" value="0 0 20 ? * SUN" />	
-	</bean>
-	
-	<bean id="jobCleannerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="jobCleannerDetail" />
-		<property name="cronExpression" value="0 0 21 ? * SUN" />
-	</bean>
+	</bean>-->
 	
 	<!-- paramétrage Factory -->
 	<bean id="schedulerFactoryBean"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="jobLotissement14hTrigger" />	
-				<ref bean="jobLotissement18hTrigger" />	
-				<ref bean="jobExportZipTrigger" />
-				<ref bean="jobNotificationTriggerAUTO" />
-				<ref bean="jobNotificationTriggerMANU" />	
-				<ref bean="jobPurgeTrigger" />
-				<ref bean="jobCleannerTrigger" />												
+				<ref bean="jobGestionNotificationTrigger" />	
+				<!-- <ref bean="jobLotissement18hTrigger" />	-->															
 			</list>
 		</property>
 	</bean>		
