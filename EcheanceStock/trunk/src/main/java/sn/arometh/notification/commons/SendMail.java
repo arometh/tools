@@ -1,22 +1,16 @@
 package sn.arometh.notification.commons;
 
 
-
 import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 
-//import org.openl.util.Log;
 
 /**
  * Envoyer un email
  */
-public class SendMail {	
-	private static final String smtpHost = PropertiesUtils.getPropertiesValues("mail.sae.serveur.smtp"); 
-	private static final String notificateur = PropertiesUtils.getPropertiesValues("mail.sae.notificateur");
-	private static final String to = PropertiesUtils.getPropertiesValues("mail.sae.liste.extelia");
-	private static final String liste_extelia = PropertiesUtils.getPropertiesValues("mail.sae.liste.extelia");
+public class SendMail implements ConstantFunctionnals {	
 	
 	/**
 	 * 
@@ -28,14 +22,14 @@ public class SendMail {
 	 */
 	public static void sendMail(String sujet, String messageMail, String listeDestinataires []) throws AddressException, MessagingException {
 		Properties props = new Properties();
-	    props.put("mail.smtp.host", smtpHost);
+	    props.put("mail.smtp.host", VAR_NOTIFICATION_CONFIGURATION_EMAIL_SMTP_HOST);
 	    props.put("mail.smtp.auth", "true");
 	 
 	    Session session = Session.getDefaultInstance(props);
 	    session.setDebug(true);
 	 
 	    MimeMessage message = new MimeMessage(session);   
-	    message.setFrom(new InternetAddress(notificateur));
+	    message.setFrom(new InternetAddress(VAR_NOTIFICATION_CONFIGURATION_EMAIL_NOTIFICATEUR));
 	    for (String to : listeDestinataires) {
 	    	 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 		}	   
@@ -43,7 +37,7 @@ public class SendMail {
 	    message.setText(messageMail);
 	 
 	    Transport tr = session.getTransport("smtp");
-	    tr.connect(smtpHost, "", "");
+	    tr.connect(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SMTP_HOST, "", "");
 	    message.saveChanges();
 	 
 	    tr.sendMessage(message,message.getAllRecipients());
@@ -57,16 +51,16 @@ public class SendMail {
 	 * @throws AddressException
 	 * @throws MessagingException
 	 */
-	public static void sendMail(String sujet, String messageMail) throws AddressException, MessagingException {
+	public static void sendMail(String sujet, String messageMail, String to) throws AddressException, MessagingException {
 		Properties props = new Properties();
-	    props.put("mail.smtp.host", smtpHost);
+	    props.put("mail.smtp.host", VAR_NOTIFICATION_CONFIGURATION_EMAIL_SMTP_HOST);
 	    props.put("mail.smtp.auth", "true");
 	 
 	    Session session = Session.getDefaultInstance(props);
 	    session.setDebug(true);
 	 
 	    MimeMessage message = new MimeMessage(session);   
-	    message.setFrom(new InternetAddress(notificateur));
+	    message.setFrom(new InternetAddress(VAR_NOTIFICATION_CONFIGURATION_EMAIL_NOTIFICATEUR));
 	    String[] destinataires = to.split(";");
 	    InternetAddress[] adresses = new InternetAddress[destinataires.length];
 	    int i = 0;
@@ -80,7 +74,7 @@ public class SendMail {
 	    message.setText(getMailMessageEntete() + messageMail);
 	 
 	    Transport tr = session.getTransport("smtp");
-	    tr.connect(smtpHost, "", "");
+	    tr.connect(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SMTP_HOST, "", "");
 	    message.saveChanges();
 	 
 	    tr.sendMessage(message,message.getAllRecipients());
@@ -88,7 +82,7 @@ public class SendMail {
 	 
 	}
 		
-	public static void sendMail(String message) {		
+	public static void sendMail(String message, String liste) throws AddressException, MessagingException {		
 		String sujet = "Notification Docapost-BPO : Anomalie remontée";
 		
 		message = "Bonjour," +
@@ -98,12 +92,8 @@ public class SendMail {
 				  message +			
 				  "\n\nCordialement\n";
 		
-		String[] destinatairesExtelia = liste_extelia.split(";");
-		try {
-			sendMail(sujet, message, destinatairesExtelia);
-		}catch(Exception e){
-			//Log.error("Erreur.", e);
-		}
+		String[] destinatairesExtelia = liste.split(";");
+		sendMail(sujet, message, destinatairesExtelia);
 	}
 	
 	/**
@@ -120,9 +110,9 @@ public class SendMail {
 	}
 	
 	public static void main(String[] args) throws AddressException, MessagingException {
-		String smtpHost = "smtpmrs.prod.extelia.fr";
-		String to = "belaid.irmeche3@extelia.fr";
-		String to1 = "olivier.bontemps3@extelia.fr";
+		String smtpHost = "localhost";
+		String to = "anscamou@yahoo.fr";
+		String to1 = "anscamou@gmail.com";
 		Properties props = new Properties();
 	    props.put("mail.smtp.host", smtpHost);
 	    props.put("mail.smtp.auth", "true");
@@ -134,7 +124,7 @@ public class SendMail {
 	    session.setDebug(true);
 	 
 	    MimeMessage message = new MimeMessage(session);   
-	    message.setFrom(new InternetAddress(notificateur));
+	    message.setFrom(new InternetAddress(VAR_NOTIFICATION_CONFIGURATION_EMAIL_NOTIFICATEUR));
 	    message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 	    message.addRecipient(Message.RecipientType.TO, new InternetAddress(to1));
 	    message.setSubject(sujet);
