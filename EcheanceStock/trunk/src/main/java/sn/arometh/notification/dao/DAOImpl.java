@@ -25,6 +25,9 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
 	
 	private String quantiteStock;
 	private String echeancePeriode;
+	private String[] whIDStocks;
+	private String[] whIDSuppliers;
+	private String[] whIDCustomer;
 	
 	/** connection*/
 	private Connection con;
@@ -40,6 +43,9 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
 		}else {
 		    quantiteStock = VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE;
 		    echeancePeriode = VAR_NOTIFICATION_BDD_ECHEANCE_PERIODE;
+		    whIDStocks = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK.split(";");
+		    whIDSuppliers = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_SUPPLIER.split(";");
+		    whIDCustomer = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_CUSTOMER.split(";");		    
 		}
 	}
 

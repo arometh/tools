@@ -14,6 +14,13 @@ public interface ConstantFunctionnals {
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION = Properties.getPropertiesValues("echeance.notification.email.sujet.notification");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_RAS = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.ras");
     
+  //variable contenant les id des emplacements dans le stock
+    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_WH = "echeance.notification.id.entrepot.wh";
+    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK = "echeance.notification.id.entrepot.stock";
+    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_CUSTOMER = "echeance.notification.id.entrepot.customer";
+    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_SUPPLIER = "echeance.notification.id.entrepot.supplier";
+    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_PROCUREMENT = "echeance.notification.id.entrepot.procurement";
+    
     //Variable d'accès à la base de données
     /** variable qui stocke le nom de la machine */
     static final String VAR_NOTIFICATION_BDD_MACHINE = Properties.getPropertiesValues("echeance.notification.machine");
@@ -44,5 +51,5 @@ public interface ConstantFunctionnals {
     static final String VAR_NOTIFICATION_BUSINESS_ENTETE_MESSAGE_STOCK_ALERT = "echeance.notitication.entete.message.email";
     /** si pas stock on renvoi ce message à la place */
     static final String VAR_NOTIFICATION_BUSINESS_RAS_STOCK_MESSAGE_ALERT = "echeance.notitication.ras.stock.message";
-    
+        
 }
