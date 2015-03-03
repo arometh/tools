@@ -8,10 +8,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+
+
+
+
+
 
 
 
@@ -109,19 +115,12 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 			    }}
 			)));
 		
-		/*for (Object object : stock) {
-		    Map map = (HashMap) object;
-		    for (Iterator i = map.keySet().iterator() ; i.hasNext() ; ){
-		        String key = (String) i.next();
-		        System.out.println("key = " + key + " value = " + map.get(key));		
-		        if("product_id".equals(key)){
-		            
-		        }
-		    }
-		    System.out.println();
-		    System.out.println();
-		}*/
-		//System.out.println(stock);
+		OdooImpl oo = new OdooImpl();
+		for (Object object : stock) {
+		    oo.record = (HashMap<String, Object>) object;
+		    oo.convertRelated();
+		}
+		System.out.println(oo.record);
 		
 		List<Object> quant = Arrays.asList((Object[])models.execute("execute_kw", Arrays.asList(
 			    db, uid, password,
@@ -147,7 +146,35 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 		                                                     }}
 		                                                 ));
 		
-		System.out.println(Arrays.toString(ob));
+		//System.out.println(Arrays.toString(ob));
 	}
+	private HashMap<String, Object> record;
+	private void convertRelated() {
+        // needed to avoid ConcurrentModificationException when adding the new
+        // _NAME key
+        HashMap<String, Object> converted = new HashMap<String, Object>();
+
+        Set<String> keys = record.keySet();
+        Iterator<String> i = keys.iterator();
+        while (i.hasNext()) {
+            String key = i.next();
+
+            // let's see if we got an array
+            try {
+                Object[] o = (Object[]) record.get(key);
+                if (o.length > 1) {
+                    // found one: add explicit values
+                    converted.put(key, o[0]); // will overwrite value
+                    converted.put(key + "_NAME", o[1]);
+                }
+            } catch (ClassCastException e) {
+                // nothing to do. isn't a related record after all
+            }
+
+        }
+
+        // combine with new values
+        record.putAll(converted);
+    }
 
 }

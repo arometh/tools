@@ -24,6 +24,7 @@ public interface ConstantFunctionnals {
     //Variable d'accès au service REST
     final static String VAR_NOTIFICATION_REST_EXECUTE_KW = "execute_kw";
     static final String VAR_NOTIFICATION_REST_URL = Properties.getPropertiesValues("echeance.notification.rest.url");
+    static final String VAR_NOTIFICATION_REST_MACHINE = Properties.getPropertiesValues("echeance.notification.rest.machine");
     static final String VAR_NOTIFICATION_REST_DATABASE = Properties.getPropertiesValues("echeance.notification.rest.db");
     static final String VAR_NOTIFICATION_REST_USER = Properties.getPropertiesValues("echeance.notification.rest.username");
     static final String VAR_NOTIFICATION_REST_PASSWORD = Properties.getPropertiesValues("echeance.notification.rest.password");
