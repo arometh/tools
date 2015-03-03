@@ -30,7 +30,7 @@ public class Business implements ConstantFunctionnals {
     	   if(null != stockAlert && !stockAlert.isEmpty()){
     	       retourFormatStock = VAR_NOTIFICATION_BUSINESS_ENTETE_MESSAGE_STOCK_ALERT;
         	   for (Stock stock : stockAlert) {	           	       
-        	       retourFormatStock += System.getProperty("line.separator") + stock.getNomProduit() + ";" + stock.getEmplacement() + ";" + stock.getQuantityStock() + ";" + stock.getDateExpirationStock(); 
+        	       //retourFormatStock += System.getProperty("line.separator") + stock.getNomProduit() + ";" + stock.getEmplacement() + ";" + stock.getQuantityStock() + ";" + stock.getDateExpirationStock(); 
         	   }
     	   }else {
     	       retourFormatStock += System.getProperty("line.separator") + VAR_NOTIFICATION_BUSINESS_RAS_STOCK_MESSAGE_ALERT;

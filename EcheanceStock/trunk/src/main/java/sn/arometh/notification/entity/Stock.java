@@ -5,36 +5,40 @@ import java.io.Serializable;
 public class Stock implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	/** Nom du produit */
-	private String nomProduit;
+	/** Produit */
+	private Product product;
+	
+	
 	/** emplacement du produit dans le stock */
-	private String emplacement;
+	private Location emplacement;
+	
 	/** quantite du stock */
 	private String quantityStock;
+	
 	/** date d'expiration du stock */
 	private String dateExpirationStock;
     /**
      * @return the nomProduit
      */
-    public String getNomProduit() {
-        return nomProduit;
+    public Product getProduct() {
+        return product;
     }
     /**
      * @param pNomProduit the nomProduit to set
      */
-    public void setNomProduit(String pNomProduit) {
-        nomProduit = pNomProduit;
+    public void setProduit(Product pProduct) {
+        product = pProduct;
     }
     /**
      * @return the emplacement
      */
-    public String getEmplacement() {
+    public Location getEmplacement() {
         return emplacement;
     }
     /**
      * @param pEmplacement the emplacement to set
      */
-    public void setEmplacement(String pEmplacement) {
+    public void setEmplacement(Location pEmplacement) {
         emplacement = pEmplacement;
     }
     /**
