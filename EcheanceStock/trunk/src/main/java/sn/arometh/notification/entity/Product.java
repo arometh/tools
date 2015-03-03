@@ -8,12 +8,6 @@ public class Product {
 	/** Nom du produit */
 	private String name;
 	
-	/** quantité disponible du produit en stock */
-	private Integer quantStock;
-	
-	/** Quantité virtuel disponible en stock */
-	private Integer quantVirtual;
-	
 	/** variante du produit */
 	private String variante;
 
@@ -46,34 +40,6 @@ public class Product {
 	}
 
 	/**
-	 * @return the quantStock
-	 */
-	public Integer getQuantStock() {
-		return quantStock;
-	}
-
-	/**
-	 * @param quantStock the quantStock to set
-	 */
-	public void setQuantStock(Integer quantStock) {
-		this.quantStock = quantStock;
-	}
-
-	/**
-	 * @return the quantVirtual
-	 */
-	public Integer getQuantVirtual() {
-		return quantVirtual;
-	}
-
-	/**
-	 * @param quantVirtual the quantVirtual to set
-	 */
-	public void setQuantVirtual(Integer quantVirtual) {
-		this.quantVirtual = quantVirtual;
-	}
-
-	/**
 	 * @return the variante
 	 */
 	public String getVariante() {
@@ -87,5 +53,8 @@ public class Product {
 		this.variante = variante;
 	}
 	
-	
+	@Override
+	public String toString() {	    
+	    return "Produit : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", VARIANTE => " + this.getVariante() + " ]";
+	}
 }

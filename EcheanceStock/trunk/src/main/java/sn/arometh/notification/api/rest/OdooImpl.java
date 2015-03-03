@@ -94,12 +94,10 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 		
 		List<Object> produit = Arrays.asList((Object[])models.execute("execute_kw", Arrays.asList(
 			    db, uid, password,
-			    "product.product", "search_read",
-			    Arrays.asList(Arrays.asList(
-			        Arrays.asList("active", "=", true))),
+			    "product.template", "search_read",
+			    Arrays.asList(Arrays.asList()),
 			    new HashMap() {{
 			        put("fields", Arrays.asList("name_template"));
-			        put("limit", 15);
 			    }}
 			)));
 		
@@ -116,7 +114,7 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 			)));
 		
 		OdooImpl oo = new OdooImpl();
-		for (Object object : stock) {
+		for (Object object : produit) {
 		    oo.record = (HashMap<String, Object>) object;
 		    oo.convertRelated();
 		}

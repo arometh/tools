@@ -12,7 +12,7 @@ import org.quartz.StatefulJob;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import sn.arometh.notification.bean.GestionNotificationStockBean;
-import sn.arometh.notification.business.Business;
+import sn.arometh.notification.business.BusinessImpl;
 import sn.arometh.notification.commons.ConstantFunctionnals;
 import sn.arometh.notification.commons.SendMail;
 
@@ -20,29 +20,29 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
 
     private static Logger logger = Logger.getLogger(GestionNotificationStockJob.class);
                                                     
-    private Business bussiness;
+    private BusinessImpl bussiness;
     
     private GestionNotificationStockBean gestionNotificationBean;
     
     
     public GestionNotificationStockJob() {
     	logger.debug("############ Constructeur: Creation d'un nouveau bean pour la gestion des Notification.");
-    	gestionNotificationBean = new GestionNotificationStockBean();
+    	/*gestionNotificationBean = new GestionNotificationStockBean();
     	try {
-			bussiness = new Business(false);
+			//bussiness = new BusinessImpl(false);
 		} catch (ClassNotFoundException e) {
 			logger.error("ERROR", e);
 			e.printStackTrace();
 		} catch (SQLException e) {
 			logger.error("ERROR", e);
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	@Override
     protected void executeInternal(JobExecutionContext pArg0) throws JobExecutionException {
         logger.debug("############ Execution du scheduler de gestion des notifications => " + gestionNotificationBean.getNameScheduler());
-        String stockNotification = bussiness.rechercherStockAlert();        
+        /*String stockNotification = bussiness.rechercherStockAlert();        
         if(Boolean.getBoolean(VAR_NOTIFICATION_CONFIGURATION_STOP_MAIL)){
            //envoie de mail
             try {
@@ -60,7 +60,7 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
                 logger.error("Error", e);
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 }

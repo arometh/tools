@@ -574,4 +574,33 @@ public class OdooRecord {
 		return u;
 	}
 
+    /**
+     * @return the record
+     */
+    public HashMap<String, Object> getRecord() {
+        return record;
+    }
+
+    /**
+     * @param pRecord the record to set
+     */
+    public void setRecord(HashMap<String, Object> pRecord) {
+        record = pRecord;
+    }
+
+    /**
+     * @return the original
+     */
+    public HashMap<String, Object> getOriginal() {
+        return original;
+    }
+
+    /**
+     * @param pOriginal the original to set
+     */
+    public void setOriginal(HashMap<String, Object> pOriginal) {
+        original = pOriginal;
+    }
+
+	
 }

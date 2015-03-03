@@ -12,12 +12,12 @@ class example {
 
 	public static void main(String[] args) throws MalformedURLException, XmlRpcException {
 		example ex = new example();
-		//ex.relate();
-		ex.search_and_output();
+		ex.relate();
+		//ex.search_and_output();
 	}
 
 	public example() throws MalformedURLException, XmlRpcException {
-		odoo = new Odoo("localhost", "arometh1", "admin", "azeqsdwxc");
+		odoo = new Odoo("localhost", "arometh", "admin", "azeqsdwxc");
 	}
 
 	public void search_and_output() {
