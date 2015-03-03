@@ -115,13 +115,13 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 		        String key = (String) i.next();
 		        System.out.println("key = " + key + " value = " + map.get(key));		
 		        if("product_id".equals(key)){
-		        	
+		            
 		        }
 		    }
 		    System.out.println();
 		    System.out.println();
 		}*/
-		System.out.println(stock);
+		//System.out.println(stock);
 		
 		List<Object> quant = Arrays.asList((Object[])models.execute("execute_kw", Arrays.asList(
 			    db, uid, password,
@@ -134,6 +134,20 @@ public class OdooImpl implements Odoo, ConstantFunctionnals {
 			    }}
 			)));
 		//System.out.println(quant);
+		
+		Object [] ob = (Object[])models.execute("execute_kw", Arrays.asList(
+		                                                     db, uid, password,
+		                                                     "res.partner", "search_read",
+		                                                     Arrays.asList(Arrays.asList(
+		                                                         Arrays.asList("is_company", "=", true),
+		                                                         Arrays.asList("customer", "=", true))),
+		                                                     new HashMap() {{
+		                                                         put("fields", Arrays.asList("name", "country_id", "comment"));
+		                                                         put("limit", 5);
+		                                                     }}
+		                                                 ));
+		
+		System.out.println(Arrays.toString(ob));
 	}
 
 }
