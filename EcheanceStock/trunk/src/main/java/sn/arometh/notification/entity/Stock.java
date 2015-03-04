@@ -2,7 +2,7 @@ package sn.arometh.notification.entity;
 
 import java.io.Serializable;
 
-public class Stock implements Serializable{
+public class Stock extends Entity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	/** Produit */
@@ -17,7 +17,8 @@ public class Stock implements Serializable{
 	
 	/** date d'expiration du stock */
 	private String dateExpirationStock;
-    /**
+	
+	/**
      * @return the nomProduit
      */
     public Product getProduct() {
@@ -26,7 +27,7 @@ public class Stock implements Serializable{
     /**
      * @param pNomProduit the nomProduit to set
      */
-    public void setProduit(Product pProduct) {
+    public void setProduct(Product pProduct) {
         product = pProduct;
     }
     /**

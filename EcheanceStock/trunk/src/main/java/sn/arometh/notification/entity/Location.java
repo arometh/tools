@@ -1,12 +1,6 @@
 package sn.arometh.notification.entity;
 
-public class Location {
-	
-	/** id location */
-	private int id;
-	
-	/** nom location */
-	private String name;
+public class Location extends Entity {
 	
 	/** location parent */
 	private int parentLocation;
@@ -19,35 +13,14 @@ public class Location {
 	
 	/** actif */
 	private boolean active;
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
+	
+	public Location() {
+		super();
 	}
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
+	public Location (Integer pID, String pName) {
+		super(pID, pName);
 	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	/**
 	 * @return the parentLocation
 	 */

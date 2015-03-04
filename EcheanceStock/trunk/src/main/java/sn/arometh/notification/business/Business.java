@@ -3,6 +3,7 @@ package sn.arometh.notification.business;
 import java.util.List;
 
 import sn.arometh.notification.entity.Product;
+import sn.arometh.notification.entity.Stock;
 public interface Business {
     
     /***
@@ -10,4 +11,10 @@ public interface Business {
      * @return
      */
     public List<Product> getListProduct();
+    
+    /**
+     * Reoutne l'ensemble des produits du stock
+     * @return
+     */
+    public List<Stock> getListStock();
 }
