@@ -1,11 +1,11 @@
-package sn.arometh.notification.commons;
+package sn.arometh.notification.enumeration;
 
-public enum ProductFieldName {
+public enum EnumProductFieldName {
     PRODUCT_ID("id"), PRODUCT_NAME("name_template"), PRODUCT_VARIANTE("variante");
 
     String fieldName;
 
-    private ProductFieldName(String pFieldName) {
+    private EnumProductFieldName(String pFieldName) {
         fieldName = pFieldName;
     }
 

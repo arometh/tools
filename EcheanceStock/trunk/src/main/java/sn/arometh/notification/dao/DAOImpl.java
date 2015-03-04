@@ -136,7 +136,7 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
 				stock = new Stock();
 				//stock.setNomProduit(rs.getString("nom_produit"));
 				//stock.setEmplacement(rs.getString("emplacement"));
-				stock.setQuantityStock(rs.getString("quantite"));
+				//stock.setQuantityStock(rs.getString("quantite"));
 				stock.setDateExpirationStock(rs.getString("date_stock"));
 				stockLimite.add(stock);
 			}

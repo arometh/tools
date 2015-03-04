@@ -10,10 +10,13 @@ public class Stock extends Entity implements Serializable{
 	
 	
 	/** emplacement du produit dans le stock */
-	private Location emplacement;
+	private Location emplacementSource;
 	
+	/** emplacement du produit dans le stock */
+    private Location emplacementDestination;
+    
 	/** quantite du stock */
-	private String quantityStock;
+	private Double quantityStock;
 	
 	/** date d'expiration du stock */
 	private String dateExpirationStock;
@@ -33,25 +36,38 @@ public class Stock extends Entity implements Serializable{
     /**
      * @return the emplacement
      */
-    public Location getEmplacement() {
-        return emplacement;
+    public Location getEmplacementSource() {
+        return emplacementSource;
     }
     /**
      * @param pEmplacement the emplacement to set
      */
-    public void setEmplacement(Location pEmplacement) {
-        emplacement = pEmplacement;
+    public void setEmplacementSource(Location pEmplacementSource) {
+        emplacementSource = pEmplacementSource;
+    }
+        
+    /**
+     * @return the emplacementDestination
+     */
+    public Location getEmplacementDestination() {
+        return emplacementDestination;
+    }
+    /**
+     * @param pEmplacementDestination the emplacementDestination to set
+     */
+    public void setEmplacementDestination(Location pEmplacementDestination) {
+        emplacementDestination = pEmplacementDestination;
     }
     /**
      * @return the quantityStock
      */
-    public String getQuantityStock() {
+    public Double getQuantityStock() {
         return quantityStock;
     }
     /**
      * @param pQuantityStock the quantityStock to set
      */
-    public void setQuantityStock(String pQuantityStock) {
+    public void setQuantityStock(Double pQuantityStock) {
         quantityStock = pQuantityStock;
     }
     /**
@@ -67,6 +83,9 @@ public class Stock extends Entity implements Serializable{
         dateExpirationStock = pDateExpirationStock;
     }
 	
-	
+	@Override
+	public String toString() {
+	    return "Stock : [ID => " + this.getId() + ", NOM => " + this.getName() + ", " + this.getProduct() + ", QUANTITE => " + this.getQuantityStock() + ", EMPLACEMENT SOURCE => " + this.getEmplacementSource() + ", EMPLACEMENT DESTINATION => " + this.getEmplacementDestination() + "]";
+	}
 	
 }

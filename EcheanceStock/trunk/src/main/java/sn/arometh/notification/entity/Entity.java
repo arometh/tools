@@ -2,39 +2,17 @@ package sn.arometh.notification.entity;
 
 public class Entity {
 	
-	/** ID du produit */
+	/** ID de l'entity */
 	private Integer id;
 	
-	/** Nom du produit */
+	/** Nom de l'entity */
 	private String name;
 
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+	/** Model de l'entity */
+	private String model;
+	
+	/** fied search */
+	private String[] field;
 	
 	public Entity() {
 		
@@ -44,5 +22,68 @@ public class Entity {
 		id = pID;
 		name = pName;
 	}
+	
+	public Entity(Integer pID, String pModel, String[] pField) {
+	    id= pID;
+	    model = pModel;
+	    field = pField;
+	}
+
+	/**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * @return the model
+     */
+    public String getModel() {
+        return model;
+    }
+
+    /**
+     * @param pModel the model to set
+     */
+    public void setModel(String pModel) {
+        model = pModel;
+    }
+
+    /**
+     * @return the field
+     */
+    public String[] getField() {
+        return field;
+    }
+
+    /**
+     * @param pField the field to set
+     */
+    public void setField(String[] pField) {
+        field = pField;
+    }
+	
 	
 }

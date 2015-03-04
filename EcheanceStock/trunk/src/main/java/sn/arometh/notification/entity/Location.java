@@ -3,7 +3,7 @@ package sn.arometh.notification.entity;
 public class Location extends Entity {
 	
 	/** location parent */
-	private int parentLocation;
+	private Location parentLocation;
 	
 	/** nom complet location */
 	private String completeName;
@@ -24,14 +24,14 @@ public class Location extends Entity {
 	/**
 	 * @return the parentLocation
 	 */
-	public int getParentLocation() {
+	public Location getParentLocation() {
 		return parentLocation;
 	}
 
 	/**
 	 * @param parentLocation the parentLocation to set
 	 */
-	public void setParentLocation(int parentLocation) {
+	public void setParentLocation(Location parentLocation) {
 		this.parentLocation = parentLocation;
 	}
 
@@ -77,5 +77,8 @@ public class Location extends Entity {
 		this.active = active;
 	}
 	
-	
+	@Override
+    public String toString() {      
+        return "Location : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", COMPLETE NAME => " + this.getCompleteName() + ", " + this.getParentLocation() + "]";
+    }
 }
