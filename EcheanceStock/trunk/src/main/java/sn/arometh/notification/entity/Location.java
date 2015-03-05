@@ -79,6 +79,6 @@ public class Location extends Entity {
 	
 	@Override
     public String toString() {      
-        return "Location : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", COMPLETE NAME => " + this.getCompleteName() + ", " + this.getParentLocation() + "]";
+        return "Location : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", COMPLETE NAME : " + this.getCompleteName() + ", PARENT LOCATION [ " + this.getParentLocation() + "]";
     }
 }

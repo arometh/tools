@@ -89,5 +89,8 @@ public class Quant extends Entity {
 		this.inDate = inDate;
 	}
 	
-	
+	@Override
+	public String toString() {
+	    return "Quant : [ ID => " + this.getId() + ", " + this.getProduct() + ", Quantité => " + this.getQuantite() + ", Date In => " + this.getInDate() + ", lot ID => " + this.getLotID() + "]";
+	}
 }

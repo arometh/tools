@@ -15,11 +15,11 @@ public interface ConstantFunctionnals {
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_RAS = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.ras");
     
   //variable contenant les id des emplacements dans le stock
-    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_WH = Properties.getPropertiesValues("echeance.notification.id.entrepot.wh");
-    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK = Properties.getPropertiesValues("echeance.notification.id.entrepot.stock");
-    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_CUSTOMER = Properties.getPropertiesValues("echeance.notification.id.entrepot.customer");
-    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_SUPPLIER = Properties.getPropertiesValues("echeance.notification.id.entrepot.supplier");
-    static final String VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_PROCUREMENT = Properties.getPropertiesValues("echeance.notification.id.entrepot.procurement");
+    static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_WH = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.wh"));
+    static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.stock"));
+    static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_CUSTOMER = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.customer"));
+    static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_SUPPLIER = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.supplier"));
+    static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_PROCUREMENT = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.procurement"));
     
     //Variable d'accès au service REST
     final static String VAR_NOTIFICATION_REST_EXECUTE_KW = "execute_kw";

@@ -37,7 +37,7 @@ public interface Business {
 	 * Retourne l'ensemble des produits dont la quantité est inferieure a la quantite minimal du stock
 	 * @return
 	 */
-	public List<Product> getProductAlertStock();
+	public List<Product> getProductAlertQuantStock();
 	
 	/**
 	 * Retourne l'ensemble des produits dont la date est fixée dans le stock approche de la date du jour

@@ -2,7 +2,11 @@ package sn.arometh.notification.business;
 
 
 import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +18,11 @@ import org.apache.xmlrpc.XmlRpcException;
 import sn.arometh.notification.commons.ConstantFunctionnals;
 import sn.arometh.notification.entity.Location;
 import sn.arometh.notification.entity.Product;
+import sn.arometh.notification.entity.Quant;
 import sn.arometh.notification.entity.Stock;
 import sn.arometh.notification.enumeration.EnumLocationFieldName;
 import sn.arometh.notification.enumeration.EnumProductFieldName;
+import sn.arometh.notification.enumeration.EnumQuantFieldName;
 import sn.arometh.notification.enumeration.EnumStockFieldName;
 import sn.arometh.notification.odoo.Odoo;
 import sn.arometh.notification.odoo.OdooDomain;
@@ -199,6 +205,7 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                             location.setParentLocation(getLocationByID((Integer)entryLineLocation.getValue()));
                         }catch(ClassCastException e){
                             location.setParentLocation(null);
+                            logger.warn("Erreur lot id IN  quant => " + location.getId() + ", emplacement parent => " + entryLineLocation.getValue(), e);
                         }
                     }else if(EnumLocationFieldName.LOCATION_COMPLETE_NAME.getValue().equals(entryLineLocation.getKey())){
                         location.setCompleteName((String)entryLineLocation.getValue());
@@ -209,27 +216,97 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         return location;
     }
         
+    /**
+     * Recuperation des quantités de stock par emplacement
+     * @param pLocationID
+     * @return
+     */
+    private List<Quant> getStockQuant(Integer pLocationID){
+        List<Quant> ListStockQuant = null;
+        OdooDomain domain = new OdooDomain();
+        if(null != pLocationID){
+            domain.add("location_id", pLocationID);
+        }
+        
+        Object[] stockQuantIds = odoo.search("stock.quant", domain);
+        OdooRecordSet stocksQuant = odoo.readRecords("stock.quant", stockQuantIds, new String[] { "id","product_id", "qty", "location_id", "lot_id","in_date" });
+        
+        Quant quant;
+        if(null != stocksQuant){
+            ListStockQuant = new ArrayList<Quant>();
+            Iterator<OdooRecord> lineRecordIteratorQuant = stocksQuant.iterator();
+            
+            while(lineRecordIteratorQuant.hasNext()){
+                OdooRecord lineRecordQuant = lineRecordIteratorQuant.next();
+                HashMap<String, Object> mapLineQuant = lineRecordQuant.getRecord();
+                quant = new Quant();
+                for (Map.Entry<String, Object> entryLineQuant : mapLineQuant.entrySet()){ 
+                    if(EnumQuantFieldName.QUANT_ID.getValue().equals(entryLineQuant.getKey())){
+                        quant.setId((Integer) entryLineQuant.getValue());
+                    }else if(EnumQuantFieldName.QUANT_LOCATION_ID.getValue().equals(entryLineQuant.getKey())) {
+                        try {
+                            quant.setEmplacement(getLocationByID((Integer)entryLineQuant.getValue()));
+                        }catch(ClassCastException e){
+                            quant.setEmplacement(null);
+                            logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", emplacement => " + entryLineQuant.getValue(), e);
+                        }                       
+                    }else if(EnumQuantFieldName.QUANT_PRODUCT_ID.getValue().equals(entryLineQuant.getKey())){
+                        quant.setProduct(getProductByID((Integer)entryLineQuant.getValue()));
+                    }else if(EnumQuantFieldName.QUANT_PRODUCT_QTY.getValue().equals(entryLineQuant.getKey())){
+                        try {
+                        quant.setQuantite((Double)entryLineQuant.getValue());
+                        }catch(ClassCastException e){
+                            quant.setEmplacement(null);
+                            logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", quantite => " + entryLineQuant.getValue(), e);
+                        }
+                    }else if(EnumQuantFieldName.QUANT_LOT_ID.getValue().equals(entryLineQuant.getKey())){
+                        try{
+                            quant.setLotID((Integer) entryLineQuant.getValue());
+                        }catch(ClassCastException e){
+                            quant.setLotID(null);
+                            logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", lot id => " + entryLineQuant.getValue(), e);
+                        }
+                    }else if(EnumQuantFieldName.QUANT_IN_DATE.getValue().equals(entryLineQuant.getKey())){
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        try {
+                            quant.setInDate(df.parse((String) entryLineQuant.getValue()));
+                        } catch (ParseException e) {
+                            logger.warn("Erreur date IN stock quant => " + quant.getId() + ", date in => " + entryLineQuant.getValue(), e);
+                        }
+                    }
+                }  
+                ListStockQuant.add(quant);
+            }
+        }
+        
+        return ListStockQuant;
+    }
     public static void main(String[] args) throws MalformedURLException, XmlRpcException {
     	BusinessImpl buss = new BusinessImpl();
         
-        //buss.getLocationByID(12);
+        System.out.println(buss.getLocationByID(19));
         /*List<Product> produits = buss.getListProduct();
         for (Product product : produits) {
             System.out.println(product);
         }*/
-        List<Stock> stock = buss.getListStock(null,12);
+        /*List<Stock> stock = buss.getListStock(null,12);
         for (Stock stock2 : stock) {
             System.out.println(stock2);
-        }
+        }*/
       //System.out.println(buss.getProductByID(2));
+    	/*List<Quant> stock = buss.getStockQuant(12);
+        for (Quant stock2 : stock) {
+            System.out.println(stock2);
+        }*/
+        
     }
 
 	@Override
-	public List<Product> getProductAlertStock() {
+	public List<Product> getProductAlertQuantStock() {
 		List<Product> produitQuant = null;
 		//On recupere tout le stock
 		//List<Stock> produitStock = getListStock();
-		
+		List<Quant> stockQuant = getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
 		return produitQuant;
 	}
 
