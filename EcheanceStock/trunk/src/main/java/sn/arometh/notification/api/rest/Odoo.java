@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.xmlrpc.XmlRpcException;
 
 import sn.arometh.notification.entity.Product;
-import sn.arometh.notification.entity.QuerySearch;
 
 public interface Odoo {
 

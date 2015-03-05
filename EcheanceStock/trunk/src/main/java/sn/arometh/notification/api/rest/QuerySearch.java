@@ -1,4 +1,4 @@
-package sn.arometh.notification.entity;
+package sn.arometh.notification.api.rest;
 
 import java.util.List;
 import java.util.Map;

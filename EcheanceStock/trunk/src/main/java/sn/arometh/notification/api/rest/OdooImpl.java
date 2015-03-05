@@ -27,10 +27,10 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 
 
+
 import sn.arometh.notification.commons.ConstantFunctionnals;
 import sn.arometh.notification.commons.PropertiesUtils;
 import sn.arometh.notification.entity.Product;
-import sn.arometh.notification.entity.QuerySearch;
 
 public class OdooImpl implements Odoo, ConstantFunctionnals {
 	private XmlRpcClient models;

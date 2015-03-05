@@ -7,14 +7,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 
 import sn.arometh.notification.commons.ConstantFunctionnals;
-import sn.arometh.notification.entity.Entity;
 import sn.arometh.notification.entity.Location;
 import sn.arometh.notification.entity.Product;
 import sn.arometh.notification.entity.Stock;
@@ -52,12 +49,12 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         odoo = pOdoo;
     }
 	
-    @Override
+    //@Override
     /**
      * @see sn.arometh.notification.business.Business#getListProduct()
      * {@inheritDoc}
      */
-    public List<Product> getListProduct(){
+    private List<Product> getListProduct(){
         List<Product> produits = null;
         Object[] productIds = odoo.search("product.product");
         OdooRecordSet resultProducts = odoo.readRecords("product.product", productIds, new String[] { "name_template", "categ_id" });
@@ -87,24 +84,24 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         return produits;
     }
     
-    @Override
+    //@Override
     /**
      * @see sn.arometh.notification.business.Business#getListStock()
      * {@inheritDoc}
      */
-    public List<Stock> getListStock() {
+    private List<Stock> getListStock(Integer LOCATIONID, Integer LOCATIONDESTID) {
     	List<Stock> stocks = null;
-    	Object[] stockMoveIds = odoo.search("stock.move");
+    	OdooDomain domain = new OdooDomain();
+    	if(null != LOCATIONID){
+    		domain.add("location_id", LOCATIONID);
+    	}
+    	if(null != LOCATIONDESTID){
+    		domain.add("location_dest_id", LOCATIONDESTID);
+    	}
+    	
+    	Object[] stockMoveIds = odoo.search("stock.move", domain);
 		OdooRecordSet stocksMove = odoo.readRecords("stock.move", stockMoveIds, new String[] { "id","origin", "product_id", "product_qty", "product_uos","location_id", "location_dest_id" });
 
-		Vector<Object> produitIds = stocksMove.getFieldContents("produit_id");
-        OdooRecordSet products = odoo.readRecords("product.template", produitIds, new String[] { "name_template","product_id"});
-        
-        if(null != products && null!= stocksMove){
-        	stocksMove.relate("product_id", products);
-        }
-        
-        Product produit;
         Stock stock;
         if(null != stocksMove){
         	stocks = new ArrayList<Stock>();
@@ -113,40 +110,44 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
 	        while(lineRecordIteratorStock.hasNext()){
 		        OdooRecord lineRecordStock = lineRecordIteratorStock.next();
 	            HashMap<String, Object> mapLineStock = lineRecordStock.getRecord();
-	            produit = new Product();
 	            stock = new Stock();
 	            for (Map.Entry<String, Object> entryLineStock : mapLineStock.entrySet()){ 
 	            	if(EnumStockFieldName.STOCK_ID.getValue().equals(entryLineStock.getKey())){
 	            		stock.setId((Integer) entryLineStock.getValue());
 	            	}else if(EnumStockFieldName.STOCK_LOCATION_DEST_ID.getValue().equals(entryLineStock.getKey())){
-	            	    stock.setEmplacementDestination(getLocationByID((Integer)entryLineStock.getValue()));
+	            		try {
+	            			stock.setEmplacementDestination(getLocationByID((Integer)entryLineStock.getValue()));
+                        }catch(ClassCastException e){
+                        	stock.setEmplacementDestination(null);
+                        }
 	            	}else if(EnumStockFieldName.STOCK_LOCATION_ID.getValue().equals(entryLineStock.getKey())) {
-	            	    stock.setEmplacementSource(getLocationByID((Integer)entryLineStock.getValue()));
+	            		try {
+	            			stock.setEmplacementSource(getLocationByID((Integer)entryLineStock.getValue()));
+                        }catch(ClassCastException e){
+                        	stock.setEmplacementSource(null);
+                        }	            	    
 	            	}else if(EnumStockFieldName.STOCK_PRODUCT_ID.getValue().equals(entryLineStock.getKey())){
-                        stock.setProduct(getProductByID((Integer)entryLineStock.getValue()));
+	            		stock.setProduct(getProductByID((Integer)entryLineStock.getValue()));
                     }else if(EnumStockFieldName.STOCK_PRODUCT_QTY.getValue().equals(entryLineStock.getKey())){
-                        System.out.println("err => " + entryLineStock.getValue());
                         stock.setQuantityStock((Double)entryLineStock.getValue());
                     }
-	            	//System.out.println(entryLineStock.getKey() + "  : " + entryLineStock.getValue());
 	            }  
-	            stock.setProduct(produit);
 	            stocks.add(stock);
 	        }
         }
     	return stocks;
     }
     
-    @Override
+    //@Override
     /**
      * @see sn.arometh.notification.business.Business#getProductByID(java.lang.Integer)
      * {@inheritDoc}
      */
-    public Product getProductByID(Integer pProductID) {
+    private Product getProductByID(Integer pProductID) {
         OdooDomain domain = new OdooDomain();
-        domain.add("product_id",pProductID);
+        domain.add("id",pProductID);
         Object[] productIds = odoo.search("product.product", domain);
-        OdooRecordSet resultProducts = odoo.readRecords("product.product", productIds, new String[] { "name_template", "categ_id" });
+        OdooRecordSet resultProducts = odoo.readRecords("product.product", productIds, new String[] { "id" , "name_template", "categ_id" });
         
         Product produit = null;        
         if(null != resultProducts){                       
@@ -170,12 +171,12 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         return produit;
     }
 
-    @Override
+    //@Override
     /**
      * @see sn.arometh.notification.business.Business#getLocationByID(java.lang.Integer)
      * {@inheritDoc}
      */
-    public Location getLocationByID(Integer pLocationID) {
+    private Location getLocationByID(Integer pLocationID) {
         OdooDomain domain = new OdooDomain();
         domain.add("id", pLocationID);
         Object[] locationIds = odoo.search("stock.location", domain);
@@ -189,7 +190,6 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                 HashMap<String, Object> mapLineLocation = lineRecordLocation.getRecord();
                 location = new Location();
                 for (Map.Entry<String, Object> entryLineLocation : mapLineLocation.entrySet()){   
-                    System.out.println(entryLineLocation.getKey() + "  : " + entryLineLocation.getValue());
                    if(EnumLocationFieldName.LOCATION_ID.getValue().equals(entryLineLocation.getKey())){
                         location.setId((Integer)entryLineLocation.getValue());
                     }else if(EnumLocationFieldName.LOCATION_NAME.getValue().equals(entryLineLocation.getKey())){
@@ -208,65 +208,35 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         }
         return location;
     }
-    
-    /**
-     * 
-     * @param entity
-     * @return
-     */
-    /*private Entity getEntityById(Entity entity){
-        OdooDomain domain = new OdooDomain();
-        domain.add(entity.getField()[0], entity.getId());
         
-        Object[] entityIds = odoo.search(entity.getModel());
-        OdooRecordSet resultEntitys = odoo.readRecords(entity.getModel(), entityIds, entity.getField());
-        
-        if(null != resultEntitys){
-            Iterator<OdooRecord> lineRecordIteratorEntity = resultEntitys.iterator();
-            //if(entity instanceof Product){
-                Product produit; 
-                Stock stock;
-                Location location;
-                while (lineRecordIteratorEntity.hasNext()) {
-                    OdooRecord lineRecordEntity = lineRecordIteratorEntity.next();
-                    HashMap<String, Object> mapLineEntity = lineRecordEntity.getRecord();
-                    produit = new Product();
-                    stock = new Stock();
-                    
-                    for (Map.Entry<String, Object> entryLineEntity : mapLineEntity.entrySet()){  
-                        if(entity instanceof Product){
-                            if(ProductFieldName.PRODUCT_ID.getValue().equals(entryLineEntity.getKey())){
-                                produit.setId((Integer)entryLineEntity.getValue());
-                            }else if(ProductFieldName.PRODUCT_NAME.getValue().equals(entryLineEntity.getKey())){
-                                produit.setName((String)entryLineEntity.getValue());
-                            }else if(ProductFieldName.PRODUCT_VARIANTE.getValue().equals(entryLineEntity.getKey())){
-                                produit.setVariante((String) entryLineEntity.getValue());
-                            }
-                        }else {
-                            if(StockFieldName.STOCK_ID.getValue().equals(entryLineEntity.getKey())){
-                                stock.setId((Integer) entryLineEntity.getValue());
-                            }else if(StockFieldName.STOCK_LOCATION_DEST_ID.getValue().equals(entryLineEntity.getKey())){
-                                //stock.setEmplacementDestination(getEntityById(new En));
-                            }
-                        }
-                    }
-                    return produit;
-                 }
-        }
-    	return null;
-    }*/
     public static void main(String[] args) throws MalformedURLException, XmlRpcException {
-        Business buss = new BusinessImpl();
+    	BusinessImpl buss = new BusinessImpl();
         
         //buss.getLocationByID(12);
         /*List<Product> produits = buss.getListProduct();
         for (Product product : produits) {
             System.out.println(product);
         }*/
-        List<Stock> stock = buss.getListStock();
+        List<Stock> stock = buss.getListStock(null,12);
         for (Stock stock2 : stock) {
             System.out.println(stock2);
         }
+      //System.out.println(buss.getProductByID(2));
     }
+
+	@Override
+	public List<Product> getProductAlertStock() {
+		List<Product> produitQuant = null;
+		//On recupere tout le stock
+		//List<Stock> produitStock = getListStock();
+		
+		return produitQuant;
+	}
+
+	@Override
+	public List<Product> getProductAlertOutOfDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
