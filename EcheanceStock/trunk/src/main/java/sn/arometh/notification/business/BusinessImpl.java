@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,21 +14,20 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 
-import sn.arometh.notification.commons.ConstantFunctionnals;
 import sn.arometh.notification.entity.Location;
 import sn.arometh.notification.entity.Product;
 import sn.arometh.notification.entity.Quant;
 import sn.arometh.notification.entity.Stock;
-import sn.arometh.notification.enumeration.EnumLocationFieldName;
-import sn.arometh.notification.enumeration.EnumProductFieldName;
-import sn.arometh.notification.enumeration.EnumQuantFieldName;
-import sn.arometh.notification.enumeration.EnumStockFieldName;
+import sn.arometh.notification.enumeration.EnumLocation;
+import sn.arometh.notification.enumeration.EnumProduct;
+import sn.arometh.notification.enumeration.EnumQuant;
+import sn.arometh.notification.enumeration.EnumStock;
 import sn.arometh.notification.odoo.Odoo;
 import sn.arometh.notification.odoo.OdooDomain;
 import sn.arometh.notification.odoo.OdooRecord;
 import sn.arometh.notification.odoo.OdooRecordSet;
 
-public class BusinessImpl implements Business,ConstantFunctionnals {	
+public class BusinessImpl implements Business {	
 	private static Logger logger = Logger.getLogger(BusinessImpl.class);		
 	
 	private Odoo odoo;
@@ -74,11 +72,11 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                 HashMap<String, Object> mapLineProduct = lineRecordProduct.getRecord();
                 produit = new Product();
                 for (Map.Entry<String, Object> entryLineProduct : mapLineProduct.entrySet()){                    
-                    if(EnumProductFieldName.PRODUCT_ID.getValue().equals(entryLineProduct.getKey())){
+                    if(EnumProduct.PRODUCT_ID.getValue().equals(entryLineProduct.getKey())){
                         produit.setId((Integer)entryLineProduct.getValue());
-                    }else if(EnumProductFieldName.PRODUCT_NAME.getValue().equals(entryLineProduct.getKey())){
+                    }else if(EnumProduct.PRODUCT_NAME.getValue().equals(entryLineProduct.getKey())){
                         produit.setName((String)entryLineProduct.getValue());
-                    }else if(EnumProductFieldName.PRODUCT_VARIANTE.getValue().equals(entryLineProduct.getKey())){
+                    }else if(EnumProduct.PRODUCT_VARIANTE.getValue().equals(entryLineProduct.getKey())){
                         produit.setVariante((String) entryLineProduct.getValue());
                     }
                 }    
@@ -118,23 +116,23 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
 	            HashMap<String, Object> mapLineStock = lineRecordStock.getRecord();
 	            stock = new Stock();
 	            for (Map.Entry<String, Object> entryLineStock : mapLineStock.entrySet()){ 
-	            	if(EnumStockFieldName.STOCK_ID.getValue().equals(entryLineStock.getKey())){
+	            	if(EnumStock.STOCK_ID.getValue().equals(entryLineStock.getKey())){
 	            		stock.setId((Integer) entryLineStock.getValue());
-	            	}else if(EnumStockFieldName.STOCK_LOCATION_DEST_ID.getValue().equals(entryLineStock.getKey())){
+	            	}else if(EnumStock.STOCK_LOCATION_DEST_ID.getValue().equals(entryLineStock.getKey())){
 	            		try {
 	            			stock.setEmplacementDestination(getLocationByID((Integer)entryLineStock.getValue()));
                         }catch(ClassCastException e){
                         	stock.setEmplacementDestination(null);
                         }
-	            	}else if(EnumStockFieldName.STOCK_LOCATION_ID.getValue().equals(entryLineStock.getKey())) {
+	            	}else if(EnumStock.STOCK_LOCATION_ID.getValue().equals(entryLineStock.getKey())) {
 	            		try {
 	            			stock.setEmplacementSource(getLocationByID((Integer)entryLineStock.getValue()));
                         }catch(ClassCastException e){
                         	stock.setEmplacementSource(null);
                         }	            	    
-	            	}else if(EnumStockFieldName.STOCK_PRODUCT_ID.getValue().equals(entryLineStock.getKey())){
+	            	}else if(EnumStock.STOCK_PRODUCT_ID.getValue().equals(entryLineStock.getKey())){
 	            		stock.setProduct(getProductByID((Integer)entryLineStock.getValue()));
-                    }else if(EnumStockFieldName.STOCK_PRODUCT_QTY.getValue().equals(entryLineStock.getKey())){
+                    }else if(EnumStock.STOCK_PRODUCT_QTY.getValue().equals(entryLineStock.getKey())){
                         stock.setQuantityStock((Double)entryLineStock.getValue());
                     }
 	            }  
@@ -163,11 +161,11 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                 HashMap<String, Object> mapLineProduct = lineRecordProduct.getRecord();
                 produit = new Product();
                 for (Map.Entry<String, Object> entryLineProduct : mapLineProduct.entrySet()){                    
-                    if(EnumProductFieldName.PRODUCT_ID.getValue().equals(entryLineProduct.getKey())){
+                    if(EnumProduct.PRODUCT_ID.getValue().equals(entryLineProduct.getKey())){
                         produit.setId((Integer)entryLineProduct.getValue());
-                    }else if(EnumProductFieldName.PRODUCT_NAME.getValue().equals(entryLineProduct.getKey())){
+                    }else if(EnumProduct.PRODUCT_NAME.getValue().equals(entryLineProduct.getKey())){
                         produit.setName((String)entryLineProduct.getValue());
-                    }else if(EnumProductFieldName.PRODUCT_VARIANTE.getValue().equals(entryLineProduct.getKey())){
+                    }else if(EnumProduct.PRODUCT_VARIANTE.getValue().equals(entryLineProduct.getKey())){
                         produit.setVariante((String) entryLineProduct.getValue());
                     }
                 }    
@@ -196,18 +194,18 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                 HashMap<String, Object> mapLineLocation = lineRecordLocation.getRecord();
                 location = new Location();
                 for (Map.Entry<String, Object> entryLineLocation : mapLineLocation.entrySet()){   
-                   if(EnumLocationFieldName.LOCATION_ID.getValue().equals(entryLineLocation.getKey())){
+                   if(EnumLocation.LOCATION_ID.getValue().equals(entryLineLocation.getKey())){
                         location.setId((Integer)entryLineLocation.getValue());
-                    }else if(EnumLocationFieldName.LOCATION_NAME.getValue().equals(entryLineLocation.getKey())){
+                    }else if(EnumLocation.LOCATION_NAME.getValue().equals(entryLineLocation.getKey())){
                         location.setName((String)entryLineLocation.getValue());
-                    }else if(EnumLocationFieldName.LOCATION_PARENT.getValue().equals(entryLineLocation.getKey())){
+                    }else if(EnumLocation.LOCATION_PARENT.getValue().equals(entryLineLocation.getKey())){
                         try {
                             location.setParentLocation(getLocationByID((Integer)entryLineLocation.getValue()));
                         }catch(ClassCastException e){
                             location.setParentLocation(null);
                             logger.warn("Erreur lot id IN  quant => " + location.getId() + ", emplacement parent => " + entryLineLocation.getValue(), e);
                         }
-                    }else if(EnumLocationFieldName.LOCATION_COMPLETE_NAME.getValue().equals(entryLineLocation.getKey())){
+                    }else if(EnumLocation.LOCATION_COMPLETE_NAME.getValue().equals(entryLineLocation.getKey())){
                         location.setCompleteName((String)entryLineLocation.getValue());
                     }
                 }   
@@ -216,6 +214,50 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         return location;
     }
         
+    /**
+     * Recuperation des emplacements dont l'id parent est pLocationID
+     * @param pLocationID
+     * @return
+     */
+    private List<Location> getLocationByIDParent(Integer pLocationID) {
+        OdooDomain domain = new OdooDomain();
+        domain.add("location_id", pLocationID);
+        //domain.add("location_id", 12);
+        Object[] locationIds = odoo.search("stock.location", domain);
+        OdooRecordSet resultLocations = odoo.readRecords("stock.location", locationIds, new String[] { "id", "name","location_id", "complete_name", "removal_strategy_id" });
+        
+        Location location = null;
+        List<Location> listLocation = null;
+        if(null != resultLocations){ 
+        	listLocation = new ArrayList<Location>();
+            Iterator<OdooRecord> lineRecordIteratorLocation = resultLocations.iterator();
+            while (lineRecordIteratorLocation.hasNext()) {
+                OdooRecord lineRecordLocation = lineRecordIteratorLocation.next();
+                HashMap<String, Object> mapLineLocation = lineRecordLocation.getRecord();
+                location = new Location();
+                System.out.println(mapLineLocation);
+                for (Map.Entry<String, Object> entryLineLocation : mapLineLocation.entrySet()){   
+                   if(EnumLocation.LOCATION_ID.getValue().equals(entryLineLocation.getKey())){
+                        location.setId((Integer)entryLineLocation.getValue());
+                    }else if(EnumLocation.LOCATION_NAME.getValue().equals(entryLineLocation.getKey())){
+                        location.setName((String)entryLineLocation.getValue());
+                    }else if(EnumLocation.LOCATION_PARENT.getValue().equals(entryLineLocation.getKey())){
+                        try {
+                            location.setParentLocation(getLocationByID((Integer)entryLineLocation.getValue()));
+                        }catch(ClassCastException e){
+                            location.setParentLocation(null);
+                            logger.warn("Erreur lot id IN  quant => " + location.getId() + ", emplacement parent => " + entryLineLocation.getValue(), e);
+                        }
+                    }else if(EnumLocation.LOCATION_COMPLETE_NAME.getValue().equals(entryLineLocation.getKey())){
+                        location.setCompleteName((String)entryLineLocation.getValue());
+                    }
+                }
+                listLocation.add(location);
+            }
+        }
+        return listLocation;
+    }
+    
     /**
      * Recuperation des quantités de stock par emplacement
      * @param pLocationID
@@ -228,8 +270,8 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
             domain.add("location_id", pLocationID);
         }
         
-        Object[] stockQuantIds = odoo.search("stock.quant", domain);
-        OdooRecordSet stocksQuant = odoo.readRecords("stock.quant", stockQuantIds, new String[] { "id","product_id", "qty", "location_id", "lot_id","in_date" });
+        Object[] stockQuantIds = odoo.search(EnumQuant.MODEL.getValue(), domain);
+        OdooRecordSet stocksQuant = odoo.readRecords(EnumQuant.MODEL.getValue(), stockQuantIds, new String[] { "id","product_id", "qty", "location_id", "lot_id","in_date" });
         
         Quant quant;
         if(null != stocksQuant){
@@ -241,32 +283,32 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
                 HashMap<String, Object> mapLineQuant = lineRecordQuant.getRecord();
                 quant = new Quant();
                 for (Map.Entry<String, Object> entryLineQuant : mapLineQuant.entrySet()){ 
-                    if(EnumQuantFieldName.QUANT_ID.getValue().equals(entryLineQuant.getKey())){
+                    if(EnumQuant.QUANT_ID.getValue().equals(entryLineQuant.getKey())){
                         quant.setId((Integer) entryLineQuant.getValue());
-                    }else if(EnumQuantFieldName.QUANT_LOCATION_ID.getValue().equals(entryLineQuant.getKey())) {
+                    }else if(EnumQuant.QUANT_LOCATION_ID.getValue().equals(entryLineQuant.getKey())) {
                         try {
                             quant.setEmplacement(getLocationByID((Integer)entryLineQuant.getValue()));
                         }catch(ClassCastException e){
                             quant.setEmplacement(null);
                             logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", emplacement => " + entryLineQuant.getValue(), e);
                         }                       
-                    }else if(EnumQuantFieldName.QUANT_PRODUCT_ID.getValue().equals(entryLineQuant.getKey())){
+                    }else if(EnumQuant.QUANT_PRODUCT_ID.getValue().equals(entryLineQuant.getKey())){
                         quant.setProduct(getProductByID((Integer)entryLineQuant.getValue()));
-                    }else if(EnumQuantFieldName.QUANT_PRODUCT_QTY.getValue().equals(entryLineQuant.getKey())){
+                    }else if(EnumQuant.QUANT_PRODUCT_QTY.getValue().equals(entryLineQuant.getKey())){
                         try {
                         quant.setQuantite((Double)entryLineQuant.getValue());
                         }catch(ClassCastException e){
                             quant.setEmplacement(null);
                             logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", quantite => " + entryLineQuant.getValue(), e);
                         }
-                    }else if(EnumQuantFieldName.QUANT_LOT_ID.getValue().equals(entryLineQuant.getKey())){
+                    }else if(EnumQuant.QUANT_LOT_ID.getValue().equals(entryLineQuant.getKey())){
                         try{
                             quant.setLotID((Integer) entryLineQuant.getValue());
                         }catch(ClassCastException e){
                             quant.setLotID(null);
                             logger.warn("Erreur lot id IN  quant => " + quant.getId() + ", lot id => " + entryLineQuant.getValue(), e);
                         }
-                    }else if(EnumQuantFieldName.QUANT_IN_DATE.getValue().equals(entryLineQuant.getKey())){
+                    }else if(EnumQuant.QUANT_IN_DATE.getValue().equals(entryLineQuant.getKey())){
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         try {
                             quant.setInDate(df.parse((String) entryLineQuant.getValue()));
@@ -281,10 +323,56 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         
         return ListStockQuant;
     }
+    
+    /**
+     * Recuperation des quantités de stock par emplacement parent
+     * @param pLocationID
+     * @return
+     */
+    private List<Quant> getParentStockQuant(Integer pLocationID){
+        List<Quant> ListStockQuant = null;
+        
+        List<Location> locationChildren = getLocationByIDParent(pLocationID);
+        
+        if(null != locationChildren){
+        	ListStockQuant = new ArrayList<Quant>();
+	        for (Location location : locationChildren) {
+	        	ListStockQuant.addAll(getStockQuant(location.getId()));
+			}
+        }
+             
+        return ListStockQuant;
+    }
+    
+    /**
+     * Recuperation des quantités de stock par emplacement parent et par produit
+     * @param pLocationID
+     * @return
+     */
+    private Map<Integer, Product> getQuantByProductInStock(Integer pLocationID) {
+    	Map<Integer, Product> quantProduct = null;
+		//On recupere tout le stock
+		List<Quant> stockQuant = getParentStockQuant(pLocationID);
+		stockQuant.addAll(getStockQuant(pLocationID));
+		
+		if(!stockQuant.isEmpty()){
+			quantProduct = new HashMap<Integer, Product>();
+			for (Quant quant : stockQuant) {
+				if(null != quantProduct.get(quant.getProduct().getId())){
+					quant.getProduct().setQtyOnHand(quantProduct.get(quant.getProduct().getId()).getQtyOnHand() + quant.getQuantite());
+				}else {
+					quant.getProduct().setQtyOnHand(quant.getQuantite());					
+				}
+				quantProduct.put(quant.getProduct().getId(),quant.getProduct());
+				//System.out.println(quant);
+			}
+		}
+    	return quantProduct;
+    }
     public static void main(String[] args) throws MalformedURLException, XmlRpcException {
     	BusinessImpl buss = new BusinessImpl();
         
-        System.out.println(buss.getLocationByID(19));
+        //System.out.println(buss.getLocationByID(19));
         /*List<Product> produits = buss.getListProduct();
         for (Product product : produits) {
             System.out.println(product);
@@ -298,15 +386,19 @@ public class BusinessImpl implements Business,ConstantFunctionnals {
         for (Quant stock2 : stock) {
             System.out.println(stock2);
         }*/
-        
+        //buss.getProductAlertQuantStock();
+    	List<Location> loc = buss.getLocationByIDParent(11);
+    	System.out.println(loc.size());
     }
 
 	@Override
 	public List<Product> getProductAlertQuantStock() {
 		List<Product> produitQuant = null;
-		//On recupere tout le stock
-		//List<Stock> produitStock = getListStock();
-		List<Quant> stockQuant = getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+		Map<Integer, Product> quants = getQuantByProductInStock(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+		
+		for (Map.Entry<Integer, Product> entry : quants.entrySet()){
+			//System.out.println("Produit ID => " + entry.getKey() + ", Product => " + entry.getValue());
+		}
 		return produitQuant;
 	}
 

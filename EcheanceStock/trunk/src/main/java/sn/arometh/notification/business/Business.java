@@ -2,10 +2,12 @@ package sn.arometh.notification.business;
 
 import java.util.List;
 
+
+import sn.arometh.notification.commons.ConstantFunctionnals;
 //import sn.arometh.notification.entity.Location;
 import sn.arometh.notification.entity.Product;
 //import sn.arometh.notification.entity.Stock;
-public interface Business {
+public interface Business extends  ConstantFunctionnals {
     
     /***
      * Retourne l'ensemble des produits de la base

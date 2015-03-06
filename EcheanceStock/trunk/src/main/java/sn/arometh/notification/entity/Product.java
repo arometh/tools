@@ -2,6 +2,9 @@ package sn.arometh.notification.entity;
 
 public class Product extends Entity {
 	
+	/** Quantite en stock du produit en temps reel */
+	private Double qtyOnHand;
+	
 	/** variante du produit */
 	private String variante;
 
@@ -44,8 +47,24 @@ public class Product extends Entity {
 		super(pID, pName);
 		variante = pVariante;
 	}
+	
+	
+	/**
+	 * @return the qtyOnHand
+	 */
+	public Double getQtyOnHand() {
+		return qtyOnHand;
+	}
+
+	/**
+	 * @param qtyOnHand the qtyOnHand to set
+	 */
+	public void setQtyOnHand(Double qtyOnHand) {
+		this.qtyOnHand = qtyOnHand;
+	}
+
 	@Override
 	public String toString() {	    
-	    return "Produit : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", VARIANTE => " + this.getVariante() + " ]";
+	    return "Produit : [ ID => " + this.getId() + ", NOM => " + this.getName() + ", Quanity On Hand => " + this.getQtyOnHand()+ ", VARIANTE => " + this.getVariante() + " ]";
 	}
 }
