@@ -481,6 +481,35 @@ public class BusinessImpl implements Business {
 
 	@Override
 	/**
+     * @see sn.arometh.notification.business.Business#formatListToMessage(List<Product>)
+     * {@inheritDoc}
+     */
+	public String formatListToMessage(List<Product> pProduct){
+	    String messageFormat = null;
+	    
+	    if(null != pProduct && !pProduct.isEmpty()){
+	        messageFormat = "";
+	        Map<Location, Product> emplacementByProduct;
+	        for (Product product : pProduct) {
+	            emplacementByProduct = getProductByLocationStock(product);
+	            messageFormat += "Produit [" + product.getName() + "] ==> Quantite [" + product.getQtyOnHand() + "] \n";
+	            messageFormat += "#######################################################\n";
+                messageFormat += "      Quantite => " + product.getQtyOnHand() + " \n";
+                messageFormat += "#######################################################\n";
+                if(null != emplacementByProduct && !emplacementByProduct.isEmpty()){
+                    for (Map.Entry<Location, Product> entry : emplacementByProduct.entrySet()) {
+                        messageFormat += "          Emplacement [" + entry.getKey().getName() + "] ==> Quantite [" + entry.getValue().getQtyOnHand() + "]";
+                    }                    
+                }
+                messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n\n"; 
+            }
+	    }
+	    
+	    return messageFormat;
+	}
+	
+	@Override
+	/**
      * @see sn.arometh.notification.business.Business#getProductAlertOutOfDate()
      * {@inheritDoc}
      */
