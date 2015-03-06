@@ -87,7 +87,7 @@ public class SendMail implements ConstantFunctionnals {
 		
 		message = "Bonjour," +
 				  "\n" +
-				  "Merci de ne pas repondre à ce message. Vous l'avez reçu suite à l'erreur ci-dessous : " +
+				  "Merci de ne pas repondre à ce message. Vous l'avez reçu suite à une notification ci-dessous : " +
 				  "\n\n" +
 				  message +			
 				  "\n\nCordialement\n";

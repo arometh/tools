@@ -11,7 +11,8 @@ public interface ConstantFunctionnals {
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_NOTIFICATEUR = Properties.getPropertiesValues("echeance.notification.email.notificateur");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_TO = Properties.getPropertiesValues("echeance.notification.email.to.destinataire");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE = Properties.getPropertiesValues("echeance.notification.email.liste.destinataire");
-    static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION = Properties.getPropertiesValues("echeance.notification.email.sujet.notification");
+    static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_QUANTITE = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.quantite");
+    static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_DATEECHEANCE = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.dateecheance");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_RAS = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.ras");
     
   //variable contenant les id des emplacements dans le stock
@@ -49,10 +50,10 @@ public interface ConstantFunctionnals {
     
     //Variable qui stocke les variables d'échéance
     /** variable qui stocke la quantite de stock en dessous de laquelle on envoie une alerte */
-    static String  VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE = Properties.getPropertiesValues("echeance.notification.quantite");
+    static Integer  VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.quantite"));
     
     /** variable qui stocke la periode  en dessous de laquelle on envoie une alerte */
-    static final String VAR_NOTIFICATION_BDD_ECHEANCE_PERIODE = Properties.getPropertiesValues("echeance.notification.periode");
+    static final Integer VAR_NOTIFICATION_BDD_ECHEANCE_PERIODE = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.periode"));
 	
     //Message retourne dans les notifications
     /** Entete du message retourne dans le mail de notification */    

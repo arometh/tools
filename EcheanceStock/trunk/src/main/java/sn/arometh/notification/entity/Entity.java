@@ -15,7 +15,7 @@ public class Entity {
 	private String[] field;
 	
 	public Entity() {
-		
+		super();
 	}
 	
 	public Entity (Integer pID, String pName) {
@@ -84,6 +84,18 @@ public class Entity {
     public void setField(String[] pField) {
         field = pField;
     }
-	
-	
+    
+    @Override
+    public boolean equals(Object pObj) {
+        if(pObj instanceof Entity){
+            Entity entity = (Entity) pObj;
+            if(this.getId().equals(entity.getId())){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
 }

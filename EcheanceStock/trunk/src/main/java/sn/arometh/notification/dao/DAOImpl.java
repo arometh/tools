@@ -41,8 +41,8 @@ public class DAOImpl implements DAO, ConstantFunctionnals{
             quantiteStock = "5";
             echeancePeriode = "10";
 		}else {
-		    quantiteStock = VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE;
-		    echeancePeriode = VAR_NOTIFICATION_BDD_ECHEANCE_PERIODE;
+		    //quantiteStock = VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE;
+		    //echeancePeriode = VAR_NOTIFICATION_BDD_ECHEANCE_PERIODE;
 		    //whIDStocks = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK.split(";");
 		    //whIDSuppliers = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_SUPPLIER.split(";");
 		    //whIDCustomer = VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_CUSTOMER.split(";");		    

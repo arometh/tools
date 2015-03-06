@@ -53,11 +53,11 @@ public class BusinessImpl implements Business {
         odoo = pOdoo;
     }
 	
-    //@Override
     /**
-     * @see sn.arometh.notification.business.Business#getListProduct()
-     * {@inheritDoc}
+     * Recupere la liste des produits du stock
+     * @return
      */
+    @SuppressWarnings("unused")
     private List<Product> getListProduct(){
         List<Product> produits = null;
         Object[] productIds = odoo.search("product.product");
@@ -88,11 +88,13 @@ public class BusinessImpl implements Business {
         return produits;
     }
     
-    //@Override
     /**
-     * @see sn.arometh.notification.business.Business#getListStock()
-     * {@inheritDoc}
+     * Recupére la liste des stock
+     * @param LOCATIONID
+     * @param LOCATIONDESTID
+     * @return
      */
+    @SuppressWarnings("unused")
     private List<Stock> getListStock(Integer LOCATIONID, Integer LOCATIONDESTID) {
     	List<Stock> stocks = null;
     	OdooDomain domain = new OdooDomain();
@@ -142,10 +144,10 @@ public class BusinessImpl implements Business {
     	return stocks;
     }
     
-    //@Override
     /**
-     * @see sn.arometh.notification.business.Business#getProductByID(java.lang.Integer)
-     * {@inheritDoc}
+     * Recupére le produit pas ID 
+     * @param pProductID
+     * @return
      */
     private Product getProductByID(Integer pProductID) {
         OdooDomain domain = new OdooDomain();
@@ -175,10 +177,10 @@ public class BusinessImpl implements Business {
         return produit;
     }
 
-    //@Override
     /**
-     * @see sn.arometh.notification.business.Business#getLocationByID(java.lang.Integer)
-     * {@inheritDoc}
+     * Recupére les emplacements en fonction de l'ID de l'emplacement
+     * @param pLocationID
+     * @return
      */
     private Location getLocationByID(Integer pLocationID) {
         OdooDomain domain = new OdooDomain();
@@ -235,7 +237,6 @@ public class BusinessImpl implements Business {
                 OdooRecord lineRecordLocation = lineRecordIteratorLocation.next();
                 HashMap<String, Object> mapLineLocation = lineRecordLocation.getRecord();
                 location = new Location();
-                System.out.println(mapLineLocation);
                 for (Map.Entry<String, Object> entryLineLocation : mapLineLocation.entrySet()){   
                    if(EnumLocation.LOCATION_ID.getValue().equals(entryLineLocation.getKey())){
                         location.setId((Integer)entryLineLocation.getValue());
@@ -364,11 +365,71 @@ public class BusinessImpl implements Business {
 					quant.getProduct().setQtyOnHand(quant.getQuantite());					
 				}
 				quantProduct.put(quant.getProduct().getId(),quant.getProduct());
-				//System.out.println(quant);
 			}
 		}
     	return quantProduct;
     }
+    
+    /**
+     * Retourne les produits par emplacements
+     * @return
+     */
+    @SuppressWarnings("unused")
+    private Map<Location, Product> getProductByLocationStock() {
+        Map<Location, Product> productLocation = null;
+        List<Quant> stockQuant = getParentStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+        stockQuant.addAll(getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK));
+        
+        Location emplacement;
+        Product product;
+        if(null != stockQuant && !stockQuant.isEmpty()){
+            productLocation = new HashMap<Location, Product>();
+            for (Quant quant : stockQuant) {
+                product = quant.getProduct();
+                emplacement = quant.getEmplacement();
+                if(null != productLocation.get(emplacement)){
+                    product.setQtyOnHand(product.getQtyOnHand() + quant.getQuantite());
+                    productLocation.put(emplacement, product);
+                } else {
+                    product.setQtyOnHand(quant.getQuantite());
+                    productLocation.put(emplacement, product);
+                }
+            }
+        }
+        return productLocation;
+    }
+    
+    /**
+     * Retourne le produit par emplacements
+     * @param pProduct
+     * @return
+     */
+    private Map<Location, Product> getProductByLocationStock(Product pProduct) {
+        Map<Location, Product> productLocation = null;
+        List<Quant> stockQuant = getParentStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+        stockQuant.addAll(getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK));
+        
+        Location emplacement;
+        Product product;
+        if(null != stockQuant && !stockQuant.isEmpty()){
+            productLocation = new HashMap<Location, Product>();
+            for (Quant quant : stockQuant) {
+                product = quant.getProduct();
+                if(null != pProduct && pProduct.equals(product)){                
+                    emplacement = quant.getEmplacement();
+                    if(null != productLocation.get(emplacement)){
+                        product.setQtyOnHand(product.getQtyOnHand() + quant.getQuantite());
+                        productLocation.put(emplacement, product);
+                    } else {
+                        product.setQtyOnHand(quant.getQuantite());
+                        productLocation.put(emplacement, product);
+                    }
+                }
+            }
+        }
+        return productLocation;
+    }
+    
     public static void main(String[] args) throws MalformedURLException, XmlRpcException {
     	BusinessImpl buss = new BusinessImpl();
         
@@ -386,23 +447,43 @@ public class BusinessImpl implements Business {
         for (Quant stock2 : stock) {
             System.out.println(stock2);
         }*/
-        //buss.getProductAlertQuantStock();
-    	List<Location> loc = buss.getLocationByIDParent(11);
-    	System.out.println(loc.size());
+    	/*List<Quant> stockQuant = buss.getParentStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+        stockQuant.addAll(buss.getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK));
+        for (Quant quant : stockQuant) {
+            System.out.println(quant);
+        }
+        buss.getProductAlertQuantStock(); */  
+    	Map<Location, Product> quants = buss.getProductByLocationStock(new Product(2, "produit 1"));
+    	for (Map.Entry<Location, Product> e : quants.entrySet()){ 
+    	    System.out.println(e.getKey().getName() + " ==> " + e.getValue());
+    	}
     }
 
 	@Override
+	/**
+     * @see sn.arometh.notification.business.Business#getProductAlertQuantStock()
+     * {@inheritDoc}
+     */
 	public List<Product> getProductAlertQuantStock() {
 		List<Product> produitQuant = null;
 		Map<Integer, Product> quants = getQuantByProductInStock(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
 		
-		for (Map.Entry<Integer, Product> entry : quants.entrySet()){
-			//System.out.println("Produit ID => " + entry.getKey() + ", Product => " + entry.getValue());
+		if(null != quants && !quants.isEmpty()){
+		    produitQuant = new ArrayList<Product>();
+    		for (Map.Entry<Integer, Product> entry : quants.entrySet()){
+    		    if(entry.getValue().getQtyOnHand() < VAR_NOTIFICATION_BDD_ECHEANCE_QUANTITE){
+    		        produitQuant.add(entry.getValue());
+    		    }
+    		}
 		}
 		return produitQuant;
 	}
 
 	@Override
+	/**
+     * @see sn.arometh.notification.business.Business#getProductAlertOutOfDate()
+     * {@inheritDoc}
+     */
 	public List<Product> getProductAlertOutOfDate() {
 		// TODO Auto-generated method stub
 		return null;
