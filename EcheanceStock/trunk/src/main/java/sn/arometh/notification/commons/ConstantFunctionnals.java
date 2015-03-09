@@ -14,6 +14,7 @@ public interface ConstantFunctionnals {
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_QUANTITE = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.quantite");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_DATEECHEANCE = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.dateecheance");
     static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_RAS = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.ras");
+    static final String VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_ENTETE_MESSAGE = Properties.getPropertiesValues("echeance.notification.email.sujet.notification.message");
     
   //variable contenant les id des emplacements dans le stock
     static final Integer VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_WH = Integer.parseInt(Properties.getPropertiesValues("echeance.notification.id.entrepot.wh"));

@@ -15,10 +15,11 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import sn.arometh.notification.bean.GestionNotificationStockBean;
 import sn.arometh.notification.business.BusinessImpl;
 import sn.arometh.notification.commons.ConstantFunctionnals;
+import sn.arometh.notification.commons.ConstantObjects;
 import sn.arometh.notification.commons.SendMail;
 import sn.arometh.notification.entity.Product;
 
-public class GestionNotificationStockJob extends QuartzJobBean implements StatefulJob, ConstantFunctionnals{
+public class GestionNotificationStockJob extends QuartzJobBean implements StatefulJob, ConstantFunctionnals, ConstantObjects{
 
     private static Logger logger = Logger.getLogger(GestionNotificationStockJob.class);
                                                     
@@ -47,34 +48,30 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
         
         //Gestion des produits 
         List<Product> productAlert = bussiness.getProductAlertQuantStock();
-        try {
-            if(null != productAlert && !productAlert.isEmpty()) {
-                String messageMail = "Rapport de stock insuffisant";
-                SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_QUANTITE,messageMail,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
-            }
-        } catch (MessagingException e) {
-            logger.error("Error", e);
-            e.printStackTrace();
-        }
-        /*String stockNotification = bussiness.rechercherStockAlert();        
-        if(Boolean.getBoolean(VAR_NOTIFICATION_CONFIGURATION_STOP_MAIL)){
-           //envoie de mail
-            try {
-                if(null != stockNotification){
-                    SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION,stockNotification,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
-                    logger.info(stockNotification);
-                }else {
-                    SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_RAS,VAR_NOTIFICATION_BUSINESS_RAS_STOCK_MESSAGE_ALERT,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
-                    logger.info(VAR_NOTIFICATION_BUSINESS_RAS_STOCK_MESSAGE_ALERT);
-                }
-                } catch (AddressException e) {
-                logger.error("Error", e);
-                e.printStackTrace();
-            } catch (MessagingException e) {
-                logger.error("Error", e);
-                e.printStackTrace();
-            }
-        }*/
+        sendMailAlert(productAlert, CONSTANT_INFO_EMAIL_QUANTITE);
+        
+        //Gestion des dates d'échéance
+        List<Product> productAlertDateOf = bussiness.getProductAlertOutOfDate();
+        sendMailAlert(productAlertDateOf, CONSTANT_INFO_EMAIL_DATEOF);
     }
 
+	/**
+	 * Envoie un mail d'alerte en formattant le message
+	 * @param pProduct
+	 */
+	private void sendMailAlert(List<Product> pProduct, String pInfo) {
+		try {
+            if(null != pProduct && !pProduct.isEmpty()) {
+                String messageMail = VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_ENTETE_MESSAGE
+                						+ bussiness.formatListToMessage(pProduct);
+                SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_QUANTITE,messageMail,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
+                logger.info("Envoie de mail d'alerte [" + pInfo + "] concernant " + pProduct.size() + " produits");
+            }else {
+            	
+            }
+        } catch (MessagingException e) {
+            logger.error("Error envoie de mail alerte", e);
+            e.printStackTrace();
+        }
+	}
 }

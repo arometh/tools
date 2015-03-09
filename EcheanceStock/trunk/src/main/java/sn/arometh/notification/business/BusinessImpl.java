@@ -60,8 +60,8 @@ public class BusinessImpl implements Business {
     @SuppressWarnings("unused")
     private List<Product> getListProduct(){
         List<Product> produits = null;
-        Object[] productIds = odoo.search("product.product");
-        OdooRecordSet resultProducts = odoo.readRecords("product.product", productIds, new String[] { "name_template", "categ_id" });
+        Object[] productIds = odoo.search(EnumProduct.MODEL.getValue());
+        OdooRecordSet resultProducts = odoo.readRecords(EnumProduct.MODEL.getValue(), productIds, new String[] { EnumProduct.PRODUCT_NAME.getValue(), EnumProduct.PRODUCT_CATEG_ID.getValue() });
 
         if(null != resultProducts){
             produits = new ArrayList<Product>();            
@@ -99,14 +99,14 @@ public class BusinessImpl implements Business {
     	List<Stock> stocks = null;
     	OdooDomain domain = new OdooDomain();
     	if(null != LOCATIONID){
-    		domain.add("location_id", LOCATIONID);
+    		domain.add(EnumStock.STOCK_LOCATION_ID.getValue(), LOCATIONID);
     	}
     	if(null != LOCATIONDESTID){
-    		domain.add("location_dest_id", LOCATIONDESTID);
+    		domain.add(EnumStock.STOCK_LOCATION_DEST_ID.getValue(), LOCATIONDESTID);
     	}
     	
-    	Object[] stockMoveIds = odoo.search("stock.move", domain);
-		OdooRecordSet stocksMove = odoo.readRecords("stock.move", stockMoveIds, new String[] { "id","origin", "product_id", "product_qty", "product_uos","location_id", "location_dest_id" });
+    	Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), domain);
+		OdooRecordSet stocksMove = odoo.readRecords(EnumStock.MODEL.getValue(), stockMoveIds, new String[] { EnumStock.STOCK_ID.getValue(),EnumStock.STOCK_ORIGIN.getValue(), EnumStock.STOCK_PRODUCT_ID.getValue(), EnumStock.STOCK_PRODUCT_QTY.getValue(), EnumStock.STOCK_PRODUCT_UOS.getValue(),EnumStock.STOCK_LOCATION_ID.getValue(), EnumStock.STOCK_LOCATION_DEST_ID.getValue() });
 
         Stock stock;
         if(null != stocksMove){
@@ -151,9 +151,9 @@ public class BusinessImpl implements Business {
      */
     private Product getProductByID(Integer pProductID) {
         OdooDomain domain = new OdooDomain();
-        domain.add("id",pProductID);
-        Object[] productIds = odoo.search("product.product", domain);
-        OdooRecordSet resultProducts = odoo.readRecords("product.product", productIds, new String[] { "id" , "name_template", "categ_id" });
+        domain.add(EnumProduct.PRODUCT_ID.getValue(),pProductID);
+        Object[] productIds = odoo.search(EnumProduct.MODEL.getValue(), domain);
+        OdooRecordSet resultProducts = odoo.readRecords(EnumProduct.MODEL.getValue(), productIds, new String[] { EnumProduct.PRODUCT_ID.getValue() , EnumProduct.PRODUCT_NAME.getValue(), EnumProduct.PRODUCT_CATEG_ID.getValue() });
         
         Product produit = null;        
         if(null != resultProducts){                       
@@ -184,9 +184,9 @@ public class BusinessImpl implements Business {
      */
     private Location getLocationByID(Integer pLocationID) {
         OdooDomain domain = new OdooDomain();
-        domain.add("id", pLocationID);
-        Object[] locationIds = odoo.search("stock.location", domain);
-        OdooRecordSet resultLocations = odoo.readRecords("stock.location", locationIds, new String[] { "id", "name","location_id", "complete_name", "removal_strategy_id" });
+        domain.add(EnumLocation.LOCATION_ID.getValue(), pLocationID);
+        Object[] locationIds = odoo.search(EnumLocation.MODEL.getValue(), domain);
+        OdooRecordSet resultLocations = odoo.readRecords(EnumLocation.MODEL.getValue(), locationIds, new String[] { EnumLocation.LOCATION_ID.getValue(), EnumLocation.LOCATION_NAME.getValue(),EnumLocation.LOCATION_ID.getValue(), EnumLocation.LOCATION_COMPLETE_NAME.getValue(), EnumLocation.REMOVAL_STRATEGY_ID.getValue() });
         
         Location location = null;        
         if(null != resultLocations){                       
@@ -223,11 +223,14 @@ public class BusinessImpl implements Business {
      */
     private List<Location> getLocationByIDParent(Integer pLocationID) {
         OdooDomain domain = new OdooDomain();
-        domain.add("location_id", pLocationID);
-        //domain.add("location_id", 12);
-        Object[] locationIds = odoo.search("stock.location", domain);
-        OdooRecordSet resultLocations = odoo.readRecords("stock.location", locationIds, new String[] { "id", "name","location_id", "complete_name", "removal_strategy_id" });
+        domain.add(EnumLocation.LOCATION_PARENT.getValue(), pLocationID);
+        //Object[] locationIds = odoo.search(EnumLocation.MODEL.getValue(), domain);
+        //OdooRecordSet resultLocations = odoo.readRecords(EnumLocation.MODEL.getValue(), locationIds, new String[] { EnumLocation.LOCATION_ID.getValue(), EnumLocation.LOCATION_NAME.getValue(),EnumLocation.LOCATION_PARENT.getValue(), EnumLocation.LOCATION_COMPLETE_NAME.getValue(), EnumLocation.REMOVAL_STRATEGY_ID.getValue() });
+
         
+        Object[] locationIds = odoo.search("stock.location", domain);
+        OdooRecordSet resultLocations = odoo.readRecords("stock.location", locationIds, new String[] { "id", "location_id_NAME","location_id", "complete_name", "removal_strategy_id" });
+
         Location location = null;
         List<Location> listLocation = null;
         if(null != resultLocations){ 
@@ -268,11 +271,11 @@ public class BusinessImpl implements Business {
         List<Quant> ListStockQuant = null;
         OdooDomain domain = new OdooDomain();
         if(null != pLocationID){
-            domain.add("location_id", pLocationID);
+            domain.add(EnumLocation.LOCATION_PARENT.getValue(), pLocationID);
         }
         
         Object[] stockQuantIds = odoo.search(EnumQuant.MODEL.getValue(), domain);
-        OdooRecordSet stocksQuant = odoo.readRecords(EnumQuant.MODEL.getValue(), stockQuantIds, new String[] { "id","product_id", "qty", "location_id", "lot_id","in_date" });
+        OdooRecordSet stocksQuant = odoo.readRecords(EnumQuant.MODEL.getValue(), stockQuantIds, new String[] { EnumQuant.QUANT_ID.getValue(),EnumQuant.QUANT_PRODUCT_ID.getValue(), EnumQuant.QUANT_PRODUCT_QTY.getValue(), EnumQuant.QUANT_LOCATION_ID.getValue(), EnumQuant.QUANT_LOT_ID.getValue() , EnumQuant.QUANT_IN_DATE.getValue()});
         
         Quant quant;
         if(null != stocksQuant){
@@ -453,10 +456,11 @@ public class BusinessImpl implements Business {
             System.out.println(quant);
         }
         buss.getProductAlertQuantStock(); */  
-    	Map<Location, Product> quants = buss.getProductByLocationStock(new Product(2, "produit 1"));
+    	/*Map<Location, Product> quants = buss.getProductByLocationStock(new Product(2, "produit 1"));
     	for (Map.Entry<Location, Product> e : quants.entrySet()){ 
     	    System.out.println(e.getKey().getName() + " ==> " + e.getValue());
-    	}
+    	}*/
+    	System.out.println(buss.formatListToMessage(buss.getProductAlertQuantStock()));
     }
 
 	@Override
@@ -492,14 +496,13 @@ public class BusinessImpl implements Business {
 	        Map<Location, Product> emplacementByProduct;
 	        for (Product product : pProduct) {
 	            emplacementByProduct = getProductByLocationStock(product);
-	            messageFormat += "Produit [" + product.getName() + "] ==> Quantite [" + product.getQtyOnHand() + "] \n";
-	            messageFormat += "#######################################################\n";
-                messageFormat += "      Quantite => " + product.getQtyOnHand() + " \n";
-                messageFormat += "#######################################################\n";
+	            messageFormat += "Produit [" + product.getName() + "] ==> Quantite [" + product.getQtyOnHand() + "] \n";	            
                 if(null != emplacementByProduct && !emplacementByProduct.isEmpty()){
+                	messageFormat += "|######################################################\n";
                     for (Map.Entry<Location, Product> entry : emplacementByProduct.entrySet()) {
-                        messageFormat += "          Emplacement [" + entry.getKey().getName() + "] ==> Quantite [" + entry.getValue().getQtyOnHand() + "]";
-                    }                    
+                        messageFormat += "-|____________ Emplacement [" + entry.getKey().getCompleteName() + "] ==> Quantite [" + entry.getValue().getQtyOnHand() + "]\n";
+                    }   
+                    messageFormat += "#######################################################\n";
                 }
                 messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n\n"; 
             }
