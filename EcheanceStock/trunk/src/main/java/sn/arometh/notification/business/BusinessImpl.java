@@ -224,12 +224,9 @@ public class BusinessImpl implements Business {
     private List<Location> getLocationByIDParent(Integer pLocationID) {
         OdooDomain domain = new OdooDomain();
         domain.add(EnumLocation.LOCATION_PARENT.getValue(), pLocationID);
-        //Object[] locationIds = odoo.search(EnumLocation.MODEL.getValue(), domain);
-        //OdooRecordSet resultLocations = odoo.readRecords(EnumLocation.MODEL.getValue(), locationIds, new String[] { EnumLocation.LOCATION_ID.getValue(), EnumLocation.LOCATION_NAME.getValue(),EnumLocation.LOCATION_PARENT.getValue(), EnumLocation.LOCATION_COMPLETE_NAME.getValue(), EnumLocation.REMOVAL_STRATEGY_ID.getValue() });
-
         
-        Object[] locationIds = odoo.search("stock.location", domain);
-        OdooRecordSet resultLocations = odoo.readRecords("stock.location", locationIds, new String[] { "id", "location_id_NAME","location_id", "complete_name", "removal_strategy_id" });
+        Object[] locationIds = odoo.search(EnumLocation.MODEL.getValue(), domain);
+        OdooRecordSet resultLocations = odoo.readRecords(EnumLocation.MODEL.getValue(), locationIds, new String[] { EnumLocation.LOCATION_ID.getValue(), EnumLocation.LOCATION_NAME.getValue(),EnumLocation.LOCATION_PARENT.getValue(), EnumLocation.LOCATION_COMPLETE_NAME.getValue(), EnumLocation.REMOVAL_STRATEGY_ID.getValue() });
 
         Location location = null;
         List<Location> listLocation = null;
@@ -432,37 +429,65 @@ public class BusinessImpl implements Business {
         }
         return productLocation;
     }
-    
-    public static void main(String[] args) throws MalformedURLException, XmlRpcException {
-    	BusinessImpl buss = new BusinessImpl();
-        
-        //System.out.println(buss.getLocationByID(19));
-        /*List<Product> produits = buss.getListProduct();
-        for (Product product : produits) {
-            System.out.println(product);
-        }*/
-        /*List<Stock> stock = buss.getListStock(null,12);
-        for (Stock stock2 : stock) {
-            System.out.println(stock2);
-        }*/
-      //System.out.println(buss.getProductByID(2));
-    	/*List<Quant> stock = buss.getStockQuant(12);
-        for (Quant stock2 : stock) {
-            System.out.println(stock2);
-        }*/
-    	/*List<Quant> stockQuant = buss.getParentStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
-        stockQuant.addAll(buss.getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK));
-        for (Quant quant : stockQuant) {
-            System.out.println(quant);
-        }
-        buss.getProductAlertQuantStock(); */  
-    	/*Map<Location, Product> quants = buss.getProductByLocationStock(new Product(2, "produit 1"));
-    	for (Map.Entry<Location, Product> e : quants.entrySet()){ 
-    	    System.out.println(e.getKey().getName() + " ==> " + e.getValue());
-    	}*/
-    	System.out.println(buss.formatListToMessage(buss.getProductAlertQuantStock()));
-    }
 
+    /**
+     * Recupére la liste des stock
+     * @param LOCATIONID
+     * @param LOCATIONDESTID
+     * @return
+     */
+    @SuppressWarnings("unused")
+    private List<Stock> getListStockByOutOfDate() {
+    	List<Stock> stocks = null;
+    	OdooDomain domain = new OdooDomain();
+    	
+    	//Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), domain);
+    	Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), EnumStock.STOCK_OUT_OF_DATE.getValue(), "is not", null);
+		OdooRecordSet stocksMove = odoo.readRecords(EnumStock.MODEL.getValue(), stockMoveIds, new String[] { EnumStock.STOCK_ID.getValue(),EnumStock.STOCK_ORIGIN.getValue(), EnumStock.STOCK_PRODUCT_ID.getValue(), EnumStock.STOCK_PRODUCT_QTY.getValue(), EnumStock.STOCK_PRODUCT_UOS.getValue(),EnumStock.STOCK_LOCATION_ID.getValue(), EnumStock.STOCK_LOCATION_DEST_ID.getValue(),EnumStock.STOCK_OUT_OF_DATE.getValue() });
+
+        Stock stock;
+        if(null != stocksMove){
+        	stocks = new ArrayList<Stock>();
+	        Iterator<OdooRecord> lineRecordIteratorStock = stocksMove.iterator();
+	        
+	        while(lineRecordIteratorStock.hasNext()){
+		        OdooRecord lineRecordStock = lineRecordIteratorStock.next();
+	            HashMap<String, Object> mapLineStock = lineRecordStock.getRecord();
+	            stock = new Stock();
+	            for (Map.Entry<String, Object> entryLineStock : mapLineStock.entrySet()){ 
+	            	if(EnumStock.STOCK_ID.getValue().equals(entryLineStock.getKey())){
+	            		stock.setId((Integer) entryLineStock.getValue());
+	            	}else if(EnumStock.STOCK_LOCATION_DEST_ID.getValue().equals(entryLineStock.getKey())){
+	            		try {
+	            			stock.setEmplacementDestination(getLocationByID((Integer)entryLineStock.getValue()));
+                        }catch(ClassCastException e){
+                        	stock.setEmplacementDestination(null);
+                        }
+	            	}else if(EnumStock.STOCK_LOCATION_ID.getValue().equals(entryLineStock.getKey())) {
+	            		try {
+	            			stock.setEmplacementSource(getLocationByID((Integer)entryLineStock.getValue()));
+                        }catch(ClassCastException e){
+                        	stock.setEmplacementSource(null);
+                        }	            	    
+	            	}else if(EnumStock.STOCK_PRODUCT_ID.getValue().equals(entryLineStock.getKey())){
+	            		stock.setProduct(getProductByID((Integer)entryLineStock.getValue()));
+                    }else if(EnumStock.STOCK_PRODUCT_QTY.getValue().equals(entryLineStock.getKey())){
+                        stock.setQuantityStock((Double)entryLineStock.getValue());
+                    }else if(EnumStock.STOCK_OUT_OF_DATE.getValue().equals(entryLineStock.getKey())){
+                    	try {
+                    		System.out.println(entryLineStock.getValue());
+                    		stock.setDateExpirationStock((String)entryLineStock.getValue());
+                    	}catch(ClassCastException e){
+                        	stock.setDateExpirationStock(null);
+                        }
+                    }
+	            }  
+	            stocks.add(stock);
+	        }
+        }
+    	return stocks;
+    }
+    
 	@Override
 	/**
      * @see sn.arometh.notification.business.Business#getProductAlertQuantStock()
@@ -504,7 +529,7 @@ public class BusinessImpl implements Business {
                     }   
                     messageFormat += "#######################################################\n";
                 }
-                messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n\n"; 
+                messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n"; 
             }
 	    }
 	    
@@ -521,4 +546,34 @@ public class BusinessImpl implements Business {
 		return null;
 	}
 
+	public static void main(String[] args) throws MalformedURLException, XmlRpcException {
+    	BusinessImpl buss = new BusinessImpl();
+        
+        //System.out.println(buss.getLocationByID(19));
+        /*List<Product> produits = buss.getListProduct();
+        for (Product product : produits) {
+            System.out.println(product);
+        }*/
+        List<Stock> stock = buss.getListStockByOutOfDate();//buss.getListStock(null,12);
+        for (Stock stock2 : stock) {
+            System.out.println(stock2);
+        }
+      //System.out.println(buss.getProductByID(2));
+    	/*List<Quant> stock = buss.getStockQuant(12);
+        for (Quant stock2 : stock) {
+            System.out.println(stock2);
+        }*/
+    	/*List<Quant> stockQuant = buss.getParentStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK);
+        stockQuant.addAll(buss.getStockQuant(VAR_NOTIFICATION_CONFIGURATION_ID_EMPLACEMENT_STOCK));
+        for (Quant quant : stockQuant) {
+            System.out.println(quant);
+        }
+        buss.getProductAlertQuantStock(); */  
+    	/*Map<Location, Product> quants = buss.getProductByLocationStock(new Product(2, "produit 1"));
+    	for (Map.Entry<Location, Product> e : quants.entrySet()){ 
+    	    System.out.println(e.getKey().getName() + " ==> " + e.getValue());
+    	}*/
+    	//System.out.println(buss.formatListToMessage(buss.getProductAlertQuantStock()));
+    }
+	
 }

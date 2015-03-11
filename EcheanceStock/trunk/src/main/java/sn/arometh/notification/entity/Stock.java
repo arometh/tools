@@ -85,7 +85,7 @@ public class Stock extends Entity implements Serializable{
 	
 	@Override
 	public String toString() {
-	    return "Stock : [ID => " + this.getId() + ", NOM => " + this.getName() + ", " + this.getProduct() + ", QUANTITE => " + this.getQuantityStock() + ", EMPLACEMENT SOURCE => " + this.getEmplacementSource() + ", EMPLACEMENT DESTINATION => " + this.getEmplacementDestination() + "]";
+	    return "Stock : [ID => " + this.getId() + ", NOM => " + this.getName() + ", " + this.getProduct() + ", Date expiration Stock => " + this.getDateExpirationStock() + ", QUANTITE => " + this.getQuantityStock() + ", EMPLACEMENT SOURCE => " + this.getEmplacementSource() + ", EMPLACEMENT DESTINATION => " + this.getEmplacementDestination() + "]";
 	}
 	
 }
