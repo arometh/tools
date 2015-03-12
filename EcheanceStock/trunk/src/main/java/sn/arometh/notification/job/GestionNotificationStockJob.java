@@ -18,6 +18,7 @@ import sn.arometh.notification.commons.ConstantFunctionnals;
 import sn.arometh.notification.commons.ConstantObjects;
 import sn.arometh.notification.commons.SendMail;
 import sn.arometh.notification.entity.Product;
+import sn.arometh.notification.entity.Stock;
 
 public class GestionNotificationStockJob extends QuartzJobBean implements StatefulJob, ConstantFunctionnals, ConstantObjects{
 
@@ -51,7 +52,7 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
         sendMailAlert(productAlert, CONSTANT_INFO_EMAIL_QUANTITE);
         
         //Gestion des dates d'échéance
-        List<Product> productAlertDateOf = bussiness.getProductAlertOutOfDate();
+        List<Stock> productAlertDateOf = bussiness.getProductAlertOutOfDate();
         sendMailAlert(productAlertDateOf, CONSTANT_INFO_EMAIL_DATEOF);
     }
 
@@ -62,8 +63,9 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
 	private void sendMailAlert(List<Product> pProduct, String pInfo) {
 		try {
             if(null != pProduct && !pProduct.isEmpty()) {
+            	
                 String messageMail = VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_ENTETE_MESSAGE
-                						+ bussiness.formatListToMessage(pProduct);
+                						+ bussiness.formatListToMessageProduct(pProduct);
                 SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_QUANTITE,messageMail,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
                 logger.info("Envoie de mail d'alerte [" + pInfo + "] concernant " + pProduct.size() + " produits");
             }else {
