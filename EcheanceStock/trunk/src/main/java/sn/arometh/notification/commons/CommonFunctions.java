@@ -15,6 +15,10 @@ public class CommonFunctions {
 	 * @return le nombre de jours entre la date date1 et la date date2
 	 */
 	public static long getNbJour(Date date1, Date date2){
-		return (long)(Math.abs(date2.getTime() - date1.getTime())) / (1000l * 60 * 60 * 24);
+	    long dateDiff = (long)(Math.abs(date2.getTime() - date1.getTime())) / (1000l * 60 * 60 * 24);
+	    if(date1.before(date2)){
+	        dateDiff = - dateDiff;
+	    }
+		return dateDiff;
 	}
 }

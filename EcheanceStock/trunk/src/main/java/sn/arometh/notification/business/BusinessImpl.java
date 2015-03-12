@@ -17,7 +17,6 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import sn.arometh.notification.commons.CommonFunctions;
 import sn.arometh.notification.commons.ConstantObjects;
-import sn.arometh.notification.entity.Entity;
 import sn.arometh.notification.entity.Location;
 import sn.arometh.notification.entity.Product;
 import sn.arometh.notification.entity.Quant;
@@ -559,26 +558,18 @@ public class BusinessImpl implements Business {
 	    
 	    if(null != pEntity && !pEntity.isEmpty()){
 	        messageFormat = "";
-	        //Map<Location, Product> emplacementByProduct;
-	        for (Stock Stock : pEntity) {
-	            
-	        	
-	        	
-	        	/*emplacementByProduct = getProductByLocationStock(product);
-	            messageFormat += "Produit [" + product.getName() + "] ==> Quantite [" + product.getQtyOnHand() + "] \n";	            
-                if(null != emplacementByProduct && !emplacementByProduct.isEmpty()){
-                	messageFormat += "|######################################################\n";
-                    for (Map.Entry<Location, Product> entry : emplacementByProduct.entrySet()) {
-                        messageFormat += "-|____________ Emplacement [" + entry.getKey().getCompleteName() + "] ==> Quantite [" + entry.getValue().getQtyOnHand() + "]\n";
-                    }   
-                    messageFormat += "#######################################################\n";
-                }*/
-                messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n"; 
+	        //Map<Location, Product> emplacementByProduct;	        
+	        for (Stock stock : pEntity) {
+	            if(!"".equals(messageFormat)){
+	                messageFormat += "---------------------------------------------------------------------------------------------------------------------------------------\n";
+	            }
+	            messageFormat += "Produit [" + stock.getProduct().getName() + "] ==> Date d'expiration [" + stock.getDateExpirationStock() + "], emplacement => [" + stock.getEmplacementSource().getCompleteName() + "] \n";	            
             }
 	    }
 	    
 	    return messageFormat;
 	}
+	
 	@Override
 	/**
      * @see sn.arometh.notification.business.Business#getProductAlertOutOfDate()
@@ -589,7 +580,7 @@ public class BusinessImpl implements Business {
     	OdooDomain domain = new OdooDomain();
     	
     	Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), domain);
-    	//Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), EnumStock.STOCK_OUT_OF_DATE.getValue(), "=", null);
+    	//Object[] stockMoveIds = odoo.search(EnumStock.MODEL.getValue(), EnumStock.STOCK_OUT_OF_DATE.getValue(), "is not", null);
 		OdooRecordSet stocksMove = odoo.readRecords(EnumStock.MODEL.getValue(), stockMoveIds, new String[] { EnumStock.STOCK_ID.getValue(),EnumStock.STOCK_ORIGIN.getValue(), EnumStock.STOCK_PRODUCT_ID.getValue(), EnumStock.STOCK_PRODUCT_QTY.getValue(), EnumStock.STOCK_PRODUCT_UOS.getValue(),EnumStock.STOCK_LOCATION_ID.getValue(), EnumStock.STOCK_LOCATION_DEST_ID.getValue(),EnumStock.STOCK_OUT_OF_DATE.getValue() });
 
         Stock stock;
@@ -654,7 +645,7 @@ public class BusinessImpl implements Business {
         for (Product product : produits) {
             System.out.println(product);
         }*/
-        List<Stock> stock;
+       /* List<Stock> stock;
 		try {
 			stock = buss.getListStockByOutOfDate();
 			for (Stock stock2 : stock) {
@@ -663,7 +654,7 @@ public class BusinessImpl implements Business {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
     	
 		//buss.getListStock(null,12);
         
@@ -683,6 +674,23 @@ public class BusinessImpl implements Business {
     	    System.out.println(e.getKey().getName() + " ==> " + e.getValue());
     	}*/
     	//System.out.println(buss.formatListToMessage(buss.getProductAlertQuantStock()));
+    	try {
+    	   /* Date dateEcheanceStock = new SimpleDateFormat(ConstantObjects.CONSTANT_DATE_FORMAT_YYYY_MM_DD_HH_MM_HH).parse("2015-03-06 11:45:54");
+            long nbDateDiff = CommonFunctions.getNbJour(dateEcheanceStock, new Date());
+            System.out.println("date diff ==> " + nbDateDiff);
+            */
+    	    List<Stock> lS = buss.getProductAlertOutOfDate();
+    	        	    
+    	    if(null == lS || lS.isEmpty()){
+    	        System.out.println("Pas d'alert");
+    	    }else {    	        
+    	        String mess = buss.formatListToMessageStock(lS);
+    	        System.out.println(lS.size() + " -- " + mess);
+    	    }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 	
 }

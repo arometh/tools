@@ -1,9 +1,9 @@
 package sn.arometh.notification.job;
 import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
@@ -47,13 +47,24 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
     protected void executeInternal(JobExecutionContext pArg0) throws JobExecutionException {
         logger.debug("############ Execution du scheduler de gestion des notifications => " + gestionNotificationBean.getNameScheduler());
         
-        //Gestion des produits 
+        //Gestion des quantités de produits 
         List<Product> productAlert = bussiness.getProductAlertQuantStock();
-        sendMailAlert(productAlert, CONSTANT_INFO_EMAIL_QUANTITE);
+        if(null != productAlert && !productAlert.isEmpty()){
+            sendMailAlert(productAlert, CONSTANT_INFO_EMAIL_QUANTITE);
+        }
         
         //Gestion des dates d'échéance
-        List<Stock> productAlertDateOf = bussiness.getProductAlertOutOfDate();
-        sendMailAlert(productAlertDateOf, CONSTANT_INFO_EMAIL_DATEOF);
+        List<Stock> productAlertDateOf;
+        try {
+            productAlertDateOf = bussiness.getProductAlertOutOfDate();
+            if(productAlertDateOf != null && !productAlertDateOf.isEmpty()){
+                sendMailAlertStock(productAlertDateOf, CONSTANT_INFO_EMAIL_DATEOF);
+            }
+        } catch (ParseException e) {
+            logger.error("ERROR parse exception => ", e);
+            e.printStackTrace();
+        }
+        
     }
 
 	/**
@@ -76,4 +87,25 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
             e.printStackTrace();
         }
 	}
+	
+	/**
+     * Envoie un mail d'alerte en formattant le message
+     * @param pProduct
+     */
+    private void sendMailAlertStock(List<Stock> pStock, String pInfo) {
+        try {
+            if(null != pStock && !pStock.isEmpty()) {
+                
+                String messageMail = VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_ENTETE_MESSAGE
+                                        + bussiness.formatListToMessageStock(pStock);
+                SendMail.sendMail(VAR_NOTIFICATION_CONFIGURATION_EMAIL_SUJET_NOTIFICATION_DATEECHEANCE,messageMail,VAR_NOTIFICATION_CONFIGURATION_EMAIL_LISTE_ENVOIE);
+                logger.info("Envoie de mail d'alerte [" + pInfo + "] concernant " + pStock.size() + " stock");
+            }else {
+                
+            }
+        } catch (MessagingException e) {
+            logger.error("Error envoie de mail alerte", e);
+            e.printStackTrace();
+        }
+    }
 }

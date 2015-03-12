@@ -36,7 +36,7 @@
 	<!-- Paramétrage des jobs -->
 	<bean id="jobGestionNotificationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="jobGestionNotificationDetail" />
-		<property name="cronExpression" value="0 15 14 * * ?" />
+		<property name="cronExpression" value="0 5 * * * ?" />
 	</bean>
 	
 	<!-- <bean id="jobLotissement18hTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
