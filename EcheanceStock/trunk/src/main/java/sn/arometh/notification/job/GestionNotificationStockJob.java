@@ -3,7 +3,16 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
@@ -47,8 +56,37 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
     protected void executeInternal(JobExecutionContext pArg0) throws JobExecutionException {
         logger.debug("############ Execution du scheduler de gestion des notifications => " + gestionNotificationBean.getNameScheduler());
         
+        Context initCtx;
+        try {
+            initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            Session session = (Session) envCtx.lookup("mail/Session");
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("contact@arometh.com"));
+            InternetAddress to[] = new InternetAddress[1];
+            to[0] = new InternetAddress("ansoumane.camara@externe.sacem.fr");
+            message.setRecipients(Message.RecipientType.TO, to);
+            message.setSubject("test");
+            message.setContent("ceci est un test", "text/plain");
+            Transport.send(message);
+        } catch (NamingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            logger.error("ERROR parse exception => ", e);
+        } catch (AddressException e) {
+            // TODO Auto-generated catch block
+            logger.error("ERROR parse exception => ", e);
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            logger.error("ERROR parse exception => ", e);
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
         //Gestion des quantités de produits 
-        List<Product> productAlert = bussiness.getProductAlertQuantStock();
+        /*List<Product> productAlert = bussiness.getProductAlertQuantStock();
         if(null != productAlert && !productAlert.isEmpty()){
             sendMailAlert(productAlert, CONSTANT_INFO_EMAIL_QUANTITE);
         }
@@ -63,7 +101,7 @@ public class GestionNotificationStockJob extends QuartzJobBean implements Statef
         } catch (ParseException e) {
             logger.error("ERROR parse exception => ", e);
             e.printStackTrace();
-        }
+        }*/
         
     }
 
